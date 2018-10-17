@@ -23,11 +23,6 @@ def train_odm(model_dir, pipeline_config_path, num_train_steps, num_eval_steps, 
     # Generate the estimator and set the model dir of the estimator to the exp dir
     #   This dir will contain the model weights and training stats
     config = tf.estimator.RunConfig(model_dir=model_dir)
-    print('-'*50)
-    print(config)
-    print('-'*50)
-    print(model_hparams.create_hparams(hparams))
-    print('{}\n{}\n{}\n{}'.format('-'*50, pipeline_config_path, num_train_steps, num_eval_steps))
     train_and_eval_dict = model_lib.create_estimator_and_inputs(
         run_config=config,
         hparams=model_hparams.create_hparams(hparams),
@@ -67,25 +62,13 @@ def config_odm_run(ds_name, model_name, pipline_config_path):
     Returns:
          hparams: (dict) Dict containing config params for training with modified input data set
     """
-
+	#TODO: Set num classes from inside this function, right now provided config file must have it set
+	#	Maybe we need a field in the data set description json for num_classes
     ds_path_dict = load_data_set_path_dict()
     model_path_dict = load_model_path_dict()
     ds_root_path = ds_path_dict[ds_name]
     tf_model_path = model_path_dict[model_name]
-    '''
-    hparams = 'batch_size=12,' \
-              'train_input_reader.label_map_path={},' \
-              'train_input_reader.tf_record_input_reader.input_path={},' \
-              'train_config.fine_tune_checkpoint={},' \
-              'eval_input_reader.label_map_path={},' \
-              'eval_input_reader.tf_record_input_reader.input_path={}'.format(
-        os.path.join(ds_root_path, 'annotations', 'label_map.pbtxt'),
-        os.path.join(ds_root_path, 'data', 'train.record'),
-        os.path.join(tf_model_path, 'model.ckpt'),
-        os.path.join(ds_root_path, 'annotations', 'label_map.pbtxt'),
-        os.path.join(ds_root_path, 'data', 'eval.record')
-    )
-    '''
+
     pipeline_dict = get_configs_from_pipeline_file(pipline_config_path)
     pipeline_dict['train_input_config'].label_map_path = os.path.join(ds_root_path, 'annotations', 'label_map.pbtxt')
     pipeline_dict['train_input_config'].tf_record_input_reader.input_path[0] = os.path.join(ds_root_path, 'data', 'train.record')
