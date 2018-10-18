@@ -51,7 +51,7 @@ def train_odm(model_dir, pipeline_config_path, num_train_steps, num_eval_steps, 
     return 0
 
 
-def config_odm_run(ds_name, model_name, pipline_config_path):
+def config_odm_run(ds_name, model_name, pipline_config_path, fine_tune):
     """ Function to modify the pipeline config. Modifies the file for a specific training data set and model fine tune ckpt
 
     Parameters
@@ -74,7 +74,9 @@ def config_odm_run(ds_name, model_name, pipline_config_path):
     pipeline_dict['train_input_config'].tf_record_input_reader.input_path[0] = os.path.join(ds_root_path, 'data', 'train.record')
     pipeline_dict['eval_input_config'].label_map_path = os.path.join(ds_root_path, 'annotations', 'label_map.pbtxt')
     pipeline_dict['eval_input_config'].tf_record_input_reader.input_path[0] = os.path.join(ds_root_path, 'data',  'eval.record')
-    pipeline_dict['train_config'].fine_tune_checkpoint = os.path.join(tf_model_path, 'model.ckpt')
-
+    if fine_tune:
+        pipeline_dict['train_config'].fine_tune_checkpoint = os.path.join(tf_model_path, 'model.ckpt')
+    else:
+        pipeline_dict['train_config'].fine_tune_checkpoint = ''
     pipeline_proto = create_pipeline_proto_from_configs(pipeline_dict)
     return pipeline_proto

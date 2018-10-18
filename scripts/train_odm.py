@@ -44,6 +44,14 @@ def parse_args():
                         help='Number of eval iterations to train for. This must set to the number of evaluation images in your data set',
                         required=True,
                         type=int)
+
+    ogroup = parser.add_argument_group('Optional Arguments')
+
+    ogroup.add_argument('--fine_tune',
+                        help='Default is [True] which trains model from a pre-trained state, if [False] model is trained from scratch',
+                        default=True,
+                        required=False,
+                        type=bool)
     return parser.parse_args()
 
 
@@ -53,7 +61,8 @@ if __name__ == '__main__':
     pipeline_out_path = os.path.join(args.exp_dir, 'pipeline.config')
     params_proto = config_odm_run(ds_name=args.data_set_name,
                                   model_name=args.model_name,
-                                  pipline_config_path=args.pipeline_config_path)
+                                  pipline_config_path=args.pipeline_config_path,
+                                  fine_tune=args.fine_tune)
 
     save_pipeline_config(params_proto, args.exp_dir)
     print('-'*50)
