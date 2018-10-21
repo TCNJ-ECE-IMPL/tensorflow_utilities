@@ -1,5 +1,4 @@
 import argparse
-import tensorflow as tf
 from TFUtils.DataSets import ClassificationDataSet
 
 
@@ -11,12 +10,25 @@ def parse_args():
 
     rgroup.add_argument('--data_set_type',
                         choices=['object_detection', 'classification'],
-                        help='Choose data set type based off of end model goal. See data set spec in TeamDrive/infrastructure for more help',
+                        help='Data set type describes the format this script will save the TensorFlow data',
                         required=True,
                         type=str)
 
     rgroup.add_argument('--input_image_dir',
-                        help='Directory path containing the top directory of the data set (format specified by TeamDrive/infrastructure data set spec',
+                        help='Directory path where the data files exist, must be in the following format\n'\
+                                'input_image_dir/\n'\
+                                '   phase1/\n'\
+                                '       class1/\n'\
+                                '           img1.jpg\n'\
+                                '       class2/\n'\
+                                '           dog.jpg\n'\
+                                '   phase2/\n'\
+                                '       class1/\n'\
+                                '           cat.png\n'\
+                                '       class2/\n'\
+                                '           doggo.bmp\n'\
+                                'Where phase1, phase2, etc are train, val, test (dont need all three) and class ids are\n'\
+                                'subdirectories names.\n',
                         required=True,
                         type=str)
 

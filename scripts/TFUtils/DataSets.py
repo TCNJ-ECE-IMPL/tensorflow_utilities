@@ -16,7 +16,7 @@ class DataSet:
     Methods:
         data_set_description_as_dict():
     """
-    def __init__(self, data_set_type, data_set_name, data_set_description, data_set_dir=None):
+    def __init__(self, data_set_type, data_set_name, data_set_description):
         # Setting up basic data set properties
         self.data_set_name = data_set_name
         self.data_set_type = data_set_type
@@ -46,7 +46,7 @@ class ObjectDetectionDataSet(DataSet):
 
     """
     def __init__(self, data_set_name, data_set_type, data_set_description, num_classes):
-        super().__init__(data_set_name, data_set_type, data_set_description)
+        super(Dataset, self).__init__(data_set_name, data_set_type, data_set_description)
         self.num_classes = num_classes
         self.sub_dirs = []
         return
@@ -72,8 +72,8 @@ class ClassificationDataSet(DataSet):
         create_data_set_from_raw_images():
         create_data_set_from_csv():
     """
-    def __init__(self, data_set_name=None, data_set_type=None, data_set_description=None, data_set_dir=None):
-        super().__init__(data_set_name, data_set_type, data_set_description, data_set_dir)
+    def __init__(self, data_set_name, data_set_type, data_set_description):
+        super().__init__(data_set_name, data_set_type, data_set_description)
 
         # If data set dir is provided then load the data set from existing files
         if data_set_dir:
