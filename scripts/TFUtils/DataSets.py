@@ -18,7 +18,6 @@ class DataSet:
     """
     def __init__(self, data_set_type, data_set_name, data_set_description):
         # Setting up basic data set properties
-        self.data_set_name = data_set_name
         self.data_set_type = data_set_type
         self.data_set_name = data_set_name
         self.data_set_description = data_set_description
@@ -72,12 +71,11 @@ class ClassificationDataSet(DataSet):
         create_data_set_from_raw_images():
         create_data_set_from_csv():
     """
-    def __init__(self, data_set_name, data_set_type, data_set_description):
-        super().__init__(data_set_name, data_set_type, data_set_description)
+    def __init__(self, data_set_type, data_set_name, data_set_description):
+        super().__init__(data_set_type=data_set_type,
+                         data_set_name=data_set_name,
+                         data_set_description=data_set_description)
 
-        # If data set dir is provided then load the data set from existing files
-        if data_set_dir:
-            pass
         self.classes = []
         self.features = {}
         return
@@ -121,47 +119,47 @@ class ClassificationDataSet(DataSet):
         # TODO: Write images to disk in provided dir structure
         assert os.path.exists(input_image_dir)
         if output_dir:
-            pass
+            output_dir = os.path.join(output_dir, self.data_set_name)
         else:
             # Setting up output dirs
-            output_dir = os.environ['OD_DS_ROOT']
-            self._create_dir_structure(output_dir)
-            # Load image file names based on directory structure
-            # Loop through phases in 'input_image_dir/' aka train/test/eval
-            # TF Record will saved as output_dir/data/phase.record
-            phase_dirs = os.listdir(input_image_dir)
-            for phase_dir in phase_dirs:
-                # Load the images into memory in TFRecord format
-                phase = os.path.basename(phase_dir[:-1] if phase_dir[-1]=='/' else phase_dir)
-                images, labels = self.load_data_set_from_raw_images(os.path.join(input_image_dir, phase_dir))
+            output_dir = os.path.join(os.environ['OD_DS_ROOT'], self.data_set_name)
+        self._create_dir_structure(output_dir)
+        # Load image file names based on directory structure
+        # Loop through phases in 'input_image_dir/' aka train/test/eval
+        # TF Record will saved as output_dir/data/phase.record
+        phase_dirs = os.listdir(input_image_dir)
+        for phase_dir in phase_dirs:
+            # Load the images into memory in TFRecord format
+            phase = os.path.basename(phase_dir[:-1] if phase_dir[-1]=='/' else phase_dir)
+            images, labels = self.load_data_set_from_raw_images(os.path.join(input_image_dir, phase_dir))
 
-                # Define the data sets classes and assert an error if a phase a different number of
-                # classes that previously assumed
-                if self.classes==[]:
-                    self.classes = list(set(labels))
-                else:
-                    assert set(labels) == set(self.classes)
-                self.data_set_size[phase] = len(images)
+            # Define the data sets classes and assert an error if a phase a different number of
+            # classes that previously assumed
+            if self.classes==[]:
+                self.classes = list(set(labels))
+            else:
+                assert set(labels) == set(self.classes)
+            self.data_set_size[phase] = len(images)
 
-                # Create features to keep track of in data set description files
-                # These can help users of the data set figure out how to extract the TFRecord files
-                features = {'image': {'name': 'image'.format(phase),
-                                      'type': 'bytes'},
-                            'label': {'name': 'label'.format(phase),
-                                      'type': 'bytes'}
-                            }
-                self.features = features
+            # Create features to keep track of in data set description files
+            # These can help users of the data set figure out how to extract the TFRecord files
+            features = {'image': {'name': 'image'.format(phase),
+                                  'type': 'bytes'},
+                        'label': {'name': 'label'.format(phase),
+                                  'type': 'bytes'}
+                        }
+            self.features = features
 
-                # Create TF record
-                output_path = os.path.join(output_dir, 'data', '{}.record'.format(phase))
-                self.write_record(output_path, images, labels, features)
-                print('Succesfully Wrote TF Record for {} image set\nCount: {}'.format(phase.upper(), self.data_set_size[phase]))
+            # Create TF record
+            output_path = os.path.join(output_dir, 'data', '{}.record'.format(phase))
+            self.write_record(output_path, images, labels, features)
+            print('Succesfully Wrote TF Record for {} image set\nCount: {}'.format(phase.upper(), self.data_set_size[phase]))
 
-            # Write auxiliary files
-            ds_description_dict = self.data_set_description_as_dict()
-            description_path = os.path.join(output_dir, 'annotations', self.description_filename)
-            with open(description_path, 'w') as fp:
-                json.dump(ds_description_dict, fp)
+        # Write auxiliary files
+        ds_description_dict = self.data_set_description_as_dict()
+        description_path = os.path.join(output_dir, 'annotations', self.description_filename)
+        with open(description_path, 'w') as fp:
+            json.dump(ds_description_dict, fp)
         return
 
     def load_data_set_from_TFRecordIO(self):
@@ -246,10 +244,15 @@ class ClassificationDataSet(DataSet):
         return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
     def _create_dir_structure(self, output_dir):
+        if not os.path.exists(output_dir):
+            os.mkdir(output_dir)
         """ Helper function to create the directory structure needed for data set storage """
-        assert os.path.exists(output_dir)
         for sub_dir in self.sub_dirs:
             w_dir = os.path.join(output_dir, sub_dir)
             if not os.path.exists(w_dir):
                 os.mkdir(w_dir)
+        assert os.path.exists(output_dir)
         return 'Successfully Created Directory Structure for {}'.format(self.data_set_name)
+
+    def data_set_description_as_dict(self):
+        return super().data_set_description_as_dict()

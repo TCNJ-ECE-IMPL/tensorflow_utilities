@@ -14,6 +14,11 @@ def parse_args():
                         required=True,
                         type=str)
 
+    rgroup.add_argument('--data_set_name',
+                        help='Choose a name for the data set. The data will be saved to [output_dir]/[data_set_name]',
+                        required=True,
+                        type=str)
+
     rgroup.add_argument('--input_image_dir',
                         help='Directory path where the data files exist, must be in the following format\n'\
                                 'input_image_dir/\n'\
@@ -32,14 +37,21 @@ def parse_args():
                         required=True,
                         type=str)
 
+    rgroup.add_argument('--output_dir',
+                        help='Data will be written to this directory',
+                        required=True,
+                        type=str)
+
     return parser.parse_args()
 
 
 if __name__ == '__main__':
     args = parse_args()
+    description = input('Enter a description for the data set:\n')
 
     if args.data_set_type == 'classification':
-        classDS = ClassificationDataSet(data_set_name='test1',
+        classDS = ClassificationDataSet(data_set_name=args.data_set_name,
                                         data_set_type=args.data_set_type,
                                         data_set_description='Description')
-        classDS.build_data_set(input_image_dir=args.input_image_dir)
+        classDS.build_data_set(input_image_dir=args.input_image_dir,
+                               output_dir=args.output_dir)
