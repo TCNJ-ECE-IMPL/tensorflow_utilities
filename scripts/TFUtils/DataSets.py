@@ -16,7 +16,13 @@ class DataSet:
     Methods:
         data_set_description_as_dict():
     """
-    def __init__(self, data_set_type, data_set_name, data_set_description):
+    def __init__(self, data_set_type, data_set_name, data_set_description, data_set_dir=None):
+        self.description_filename = 'data_set_description.json'
+        if data_set_dir:
+            self.data_set_dir = data_set_dir
+            config_path = os.path.join(self.data_set_dir, 'annotations', self.description_filename)
+            self._load_description_file_from_json(config_path)
+            return
         # Setting up basic data set properties
         self.data_set_type = data_set_type
         self.data_set_name = data_set_name
@@ -24,7 +30,6 @@ class DataSet:
 
         self.sub_dirs = ['annotations', 'data', 'images']
         self.data_set_size = {}
-        self.description_filename = 'data_set_description.json'
         return
 
     def data_set_description_as_dict(self):
@@ -33,6 +38,16 @@ class DataSet:
             prop_dict[property] = value
         return prop_dict
 
+    def load_data_set(self):
+        AssertionError('Abstract method, implement in children')
+        return
+
+    def _load_description_file_from_json(self, config_path):
+        with open(config_path, 'r') as fp:
+            config_dict = json.load(fp)
+        for key, value in config_dict.items():
+            setattr(self, key, value)
+        return
     def __repr__(self):
         print('Data Set Name: {}\nType: {}\nDecription: {}'.format(
             self.data_set_name,
@@ -71,14 +86,29 @@ class ClassificationDataSet(DataSet):
         create_data_set_from_raw_images():
         create_data_set_from_csv():
     """
-    def __init__(self, data_set_type, data_set_name, data_set_description):
+    def __init__(self, data_set_type=None, data_set_name=None, data_set_description=None, **kwargs):
+        #self.classes = []
+        #self.features = {}
         super().__init__(data_set_type=data_set_type,
                          data_set_name=data_set_name,
-                         data_set_description=data_set_description)
+                         data_set_description=data_set_description,
+                         data_set_dir=kwargs.get('data_set_dir'))
 
-        self.classes = []
-        self.features = {}
         return
+
+    def load_data_set_as_tensors(self):
+        try:
+            data_dict = self.load_data_set_from_TFRecordIO()
+        except:
+            try:
+                data_dict = self.load_data_set_from_images()
+            except:
+                try:
+                    data_dict = self.load_data_set_from_csv()
+                except:
+                    AssertionError('Data Set has no image or label data...\nCreate a data set using create_data_set.py')
+
+        return data_dict
 
     def build_data_set(self, input_image_dir, output_dir=None):
         """ Function to build a data set and format it so that way this class can read its descriptions, images, and
@@ -123,6 +153,8 @@ class ClassificationDataSet(DataSet):
         else:
             # Setting up output dirs
             output_dir = os.path.join(os.environ['OD_DS_ROOT'], self.data_set_name)
+
+        self.data_set_dir = output_dir
         self._create_dir_structure(output_dir)
         # Load image file names based on directory structure
         # Loop through phases in 'input_image_dir/' aka train/test/eval
@@ -143,12 +175,8 @@ class ClassificationDataSet(DataSet):
 
             # Create features to keep track of in data set description files
             # These can help users of the data set figure out how to extract the TFRecord files
-            features = {'image': {'name': 'image'.format(phase),
-                                  'type': 'bytes'},
-                        'label': {'name': 'label'.format(phase),
-                                  'type': 'bytes'}
-                        }
-            self.features = features
+            self.features = {'image': {'name': 'image', 'type': 'bytes'},
+                            'label': {'name': 'label', 'type': 'bytes'}}
 
             # Create TF record
             output_path = os.path.join(output_dir, 'data', '{}.record'.format(phase))
@@ -164,7 +192,41 @@ class ClassificationDataSet(DataSet):
 
     def load_data_set_from_TFRecordIO(self):
         """ Not Implemented Yet """
-        return
+        top_dir = os.path.join(self.data_set_dir, 'data')
+        result= {}
+        for recIO in os.listdir(top_dir):
+            recIO_path = os.path.join(top_dir, recIO)
+            # phase is 'phase.record'.split('.')[0] => 'phase' aka train.rec=>'train'
+            phase = os.path.basename(recIO.split('.')[0])
+
+            with tf.Session() as sess:
+                result[phase] = {}
+                feature = {self.features['image']['name']: tf.FixedLenFeature([], tf.string),
+                           self.features['label']['name']: tf.FixedLenFeature([], tf.string)}
+
+                # Create a list of filenames and pass it to a queue
+                filename_queue = tf.train.string_input_producer([recIO_path], num_epochs=1)
+                # Define a reader and read the next record
+                reader = tf.TFRecordReader()
+                _, serialized_example = reader.read(filename_queue)
+                # Decode the record read by the reader
+                dec_features = tf.parse_single_example(serialized_example, features=feature)
+                # Convert the image data from string back to the numbers
+                image = tf.decode_raw(dec_features[self.features['image']['name']], tf.float32)
+
+                # Cast label data into int32
+                label = tf.cast(dec_features[self.features['label']['name']], tf.int32)
+                # Reshape image data into the original shape
+                image = tf.reshape(image, [224, 224, 3])
+
+                # Any preprocessing here ...
+
+                # Creates batches by randomly shuffling tensors
+                images, labels = tf.train.shuffle_batch([image, label], batch_size=10, capacity=30, num_threads=1,
+                                                        min_after_dequeue=10)
+                result[phase][self.features['image']['name']] = images
+                result[phase][self.features['label']['name']] = labels
+        return result
 
     def load_data_set_from_csv(self, csv_filepath):
         """ Not Implemented Yet """
@@ -208,8 +270,8 @@ class ClassificationDataSet(DataSet):
         writer = tf.python_io.TFRecordWriter(output_path)
         for image, label in zip(images, labels):
             # Create a feature
-            feature = {features['label']['name']: self._bytes_feature(tf.compat.as_bytes(label)),
-                       features['image']['name']: self._bytes_feature(tf.compat.as_bytes(image.tostring()))}
+            feature = {self.features['label']['name']: self._bytes_feature(tf.compat.as_bytes(label)),
+                       self.features['image']['name']: self._bytes_feature(tf.compat.as_bytes(image.tostring()))}
 
             # Create an example protocol buffer
             example = tf.train.Example(features=tf.train.Features(feature=feature))
