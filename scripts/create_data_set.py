@@ -4,7 +4,7 @@ from TFUtils.DataSets import ClassificationDataSet
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='Script to create a TF Record File')
+        description='Script to create a new data set registry')
 
     rgroup = parser.add_argument_group('Required Arguments')
 
@@ -53,5 +53,6 @@ if __name__ == '__main__':
         classDS = ClassificationDataSet(data_set_name=args.data_set_name,
                                         data_set_type=args.data_set_type,
                                         data_set_description='Description')
+                                        
         classDS.build_data_set(input_image_dir=args.input_image_dir,
                                output_dir=args.output_dir)

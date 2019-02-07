@@ -4,6 +4,8 @@ import json
 import numpy as np
 import tensorflow as tf
 
+from TFUtils import load_data_set_path_dict
+
 # TODO: Extract some functionality out of children classes into parent
 
 class DataSet:

@@ -2,7 +2,7 @@
 
 This repository contains the Python scripts and libraries needed to train, evaluate, and deploy Deep Convolutional Neural Network architectures using the TensorFlow library. These tools aim to make it easier to design, implement, and train models quickly by making easier to work with data sets. This is achieved by abstracting the concept of a data set to allow machine learning engineers to focus on model development instead of data wrangling.
 
-## Installation and Set Up
+## General Installation and Set Up
 
 These tools require Python 3.6 along with the Pip package manager. Python package requirements can be installed using the following commands. See here for first time set up.
 
@@ -28,29 +28,27 @@ If installation issues occur see below
 
 ## First Time Installation and Set Up
 
-Use these instructions to set up the necessary system variables and dependancies necessary for these tools.
+Use these instructions to set up this repository for the first time on a system. These steps are necessary to configure the system variables and dependancies needed.
 
-### TensorFlow Models Repository Set Up
+### Directory Set Up
 1. Clone the TensorFlow Models Repository
 (Make sure you choose a permanent location, it will be annoying to change this later)
 ```bash
 $ cd /some/path/tensorflow/
 
-$ git clone ...
+$ git clone https://github.com/tensorflow/models.git
 ```
 
-2. Set Environment Variables
-
-To set these environment variable as a SYSTEM environment variable modify the file '/etc/profile' to include the following
+2. Create a directory to contain any future data sets. This directory should be able to allocate a large amount of storage.
 ```bash
-$ export PYTHON_PATH=$PYTHON_PATH:/some/path/tensorflow/models/
+$ mdkdir /some/path/DataSets
 ```
 
-### Data Set Directory Set Up
-1. Create a directory to contain any future data sets. This directory should be able to allocate a large amount of storage.
+### Set Environment Variables
 
-2. Set Environment Variables
-To set these environment variable as a SYSTEM environment variable modify the file '/etc/profile' to include the following
+To set these environment variable as a SYSTEM environment variable modify the file '/etc/profile' (or '~/.bash_profile' for USER environment variable) to include the following
 ```bash
-$ export DCNN_DATASETS_PATH=/some/path/tensorflow/datasets/
+export PYTHONPATH=$PYTHONPATH:/some/path/tensorflow/models/:/some/path/tensorflow/models/research/:/some/path/tensorflow/models/research/slim:/some/path/tensorflow/models/research/gan
+export DCNN_DATASETS_PATH=/some/path/tensorflow/datasets/
 ```
+The paths specified should match the 'some/path' placeholders set in step 1 and 2 above. After completion restart your shell for changes to take effect.
