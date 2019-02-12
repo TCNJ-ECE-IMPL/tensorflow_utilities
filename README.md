@@ -12,6 +12,8 @@ The following commands,
   2. Clone the TensorFlow Utilities (this repo)
   3. Install the Python package pre-requisites into your virtual environment
   4. Deactivate the virtual environment
+
+
 ```bash
 $ git clone http://link.tcnj.edu/TensorFlow-Tools/tensorflow_utilities.git
 
@@ -25,6 +27,7 @@ $ pip install -r requirements.txt
 
 $ deactivate
 ```
+
 
 ### Test for Proper Set Up
 
