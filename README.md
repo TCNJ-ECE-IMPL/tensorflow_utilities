@@ -8,10 +8,11 @@ These tools require Python 3.6 along with the Pip package manager. Python packag
 
 ### Create Python Virtual Environment and Project Set Up
 The following commands,
-  1. Create a virtual environment
-  2. Clone the TensorFlow Utilities (this repo)
-  3. Install the Python package pre-requisites into your virtual environment
-  4. Deactivate the virtual environment
+  1. Clone the TensorFlow Utilities repository
+  2. Create a virtual environment
+  3. Activate the virtual environment
+  4. Install the Python package pre-requisites into your virtual environment
+  5. Deactivate the virtual environment
 
 ```bash
 $ git clone http://link.tcnj.edu/TensorFlow-Tools/tensorflow_utilities.git
@@ -28,7 +29,6 @@ $ deactivate
 ```
 
 ### Test for Proper Set Up
-SKIP for now
 
 ```bash
 $ source tf-util-env/bin/activate
@@ -37,8 +37,6 @@ $ python scripts/test.py --all
 
 $ deactivate
 ```
-
-If installation issues occur see below
 
 ## Usage
 

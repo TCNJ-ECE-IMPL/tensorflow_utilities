@@ -157,7 +157,7 @@ class ClassificationDataSet(DataSet):
             - Writes data_set_description.json to output_dir/annotations/ which dumps this object's (ClassificationDataSet)
                 properties to a json file for later use
         """
-        
+
         assert os.path.exists(input_image_dir)
         if output_dir:
             output_dir = os.path.join(output_dir, self.data_set_name)
@@ -175,6 +175,7 @@ class ClassificationDataSet(DataSet):
         for phase_dir in phase_dirs:
             # Load the images into memory in TFRecord format
             phase = os.path.basename(phase_dir[:-1] if phase_dir[-1]=='/' else phase_dir)
+
             images, labels = self.load_data_set_from_raw_images(os.path.join(input_image_dir, phase_dir))
 
             # Define the data sets classes and assert an error if a phase a different number of
@@ -200,6 +201,8 @@ class ClassificationDataSet(DataSet):
         description_path = os.path.join(output_dir, 'annotations', self.description_filename)
         with open(description_path, 'w') as fp:
             json.dump(ds_description_dict, fp)
+
+        print('Sucessyfully built data set assets')
         return
 
     def load_data_set_from_TFRecordIO(self):
