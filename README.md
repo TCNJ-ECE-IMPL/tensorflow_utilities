@@ -28,6 +28,7 @@ $ deactivate
 ```
 
 ### Test for Proper Set Up
+SKIP for now
 
 ```bash
 $ source tf-util-env/bin/activate

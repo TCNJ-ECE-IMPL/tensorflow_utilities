@@ -78,13 +78,12 @@ class ObjectDetectionDataSet(DataSet):
     def build_data_set(self, output_dir):
         return
 
-
 class ClassificationDataSet(DataSet):
     """ Data Set Object to represent a Classification Data Set (derived from DataSets.DataSet object)
 
     Properties:
         data_set_name:          (str)   Data set name (should be unique and descriptive)
-        data_set_type:          (str)   Data set type (IMPL tf tools support classification only atm)
+        ~~data_set_type:          (str)   Data set type (IMPL tf tools support classification only atm)~~
         data_set_description:   (str)   Data set description can be provided to give more detail on the data
         classes:                (list)  List of unique class ids gathered from data set creation
         features:               (dict)  Dict of feature details to use when extracting record from the TFRecord
@@ -97,8 +96,10 @@ class ClassificationDataSet(DataSet):
         create_data_set_from_csv():
     """
     def __init__(self, data_set_type=None, data_set_name=None, data_set_description=None, **kwargs):
-        #self.classes = []
-        #self.features = {}
+        self.classes = []
+        self.features = {}
+        data_set_type = 'classification'
+
         super().__init__(data_set_type=data_set_type,
                          data_set_name=data_set_name,
                          data_set_description=data_set_description,
@@ -156,16 +157,17 @@ class ClassificationDataSet(DataSet):
             - Writes data_set_description.json to output_dir/annotations/ which dumps this object's (ClassificationDataSet)
                 properties to a json file for later use
         """
-        # TODO: Write images to disk in provided dir structure
+        
         assert os.path.exists(input_image_dir)
         if output_dir:
             output_dir = os.path.join(output_dir, self.data_set_name)
         else:
             # Setting up output dirs
-            output_dir = os.path.join(os.environ['OD_DS_ROOT'], self.data_set_name)
+            output_dir = os.path.join(os.environ['DCNN_DATASETS_PATH'], self.data_set_name)
 
-        self.data_set_dir = output_dir
-        self._create_dir_structure(output_dir)
+
+        if len(os.listdir(output_dir)):
+            self.create_dir_structure(output_dir)
         # Load image file names based on directory structure
         # Loop through phases in 'input_image_dir/' aka train/test/eval
         # TF Record will saved as output_dir/data/phase.record
@@ -190,7 +192,7 @@ class ClassificationDataSet(DataSet):
 
             # Create TF record
             output_path = os.path.join(output_dir, 'data', '{}.record'.format(phase))
-            self.write_record(output_path, images, labels, features)
+            self.write_record(output_path, images, labels, self.features)
             print('Succesfully Wrote TF Record for {} image set\nCount: {}'.format(phase.upper(), self.data_set_size[phase]))
 
         # Write auxiliary files
@@ -315,10 +317,12 @@ class ClassificationDataSet(DataSet):
         """ Helper Function to return an object that can be fed to the TF Record """
         return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
-    def _create_dir_structure(self, output_dir):
+    def create_dir_structure(self, output_dir):
+        """ Helper function to create the directory structure needed for data set storage """
+        self.data_set_dir = output_dir
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
-        """ Helper function to create the directory structure needed for data set storage """
+
         for sub_dir in self.sub_dirs:
             w_dir = os.path.join(output_dir, sub_dir)
             if not os.path.exists(w_dir):
