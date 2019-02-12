@@ -4,7 +4,7 @@ This repository contains the Python scripts and libraries needed to train, evalu
 
 ## General Installation and Set Up
 
-These tools require Python 3.6 along with the Pip package manager. Python package requirements can be installed using the following commands. Follow [these instructions](http://link/TensorFlow-Tools/tensorflow_utilities#first-time-installation-and-set-up) for first time machine set up.
+These tools require Python 3.6 along with the Pip package manager. Python package requirements can be installed using the following commands. Follow [these instructions](#first-time-installation-and-set-up) for first time machine set up.
 
 ### Create Python Virtual Environment and Set Up Project
 The following commands,
@@ -87,4 +87,4 @@ $ export PYTHONPATH=$PYTHONPATH:\
 $ export DCNN_DATASETS_PATH=/some/path/tensorflow/datasets/
 ```
 
-The paths specified should match the `some/path` placeholders set in step 1 and 2 above. After completion restart your shell for changes to take effect. Once these steps are complete [these steps](http://link/TensorFlow-Tools/tensorflow_utilities#general-installation-and-set-up) can be followed to install TensorFlow Utilities in your home directory.
+The paths specified should match the `some/path` placeholders set in step 1 and 2 above. After completion restart your shell for changes to take effect. Once these steps are complete [these steps](#general-installation-and-set-up) can be followed to install TensorFlow Utilities in your home directory.
