@@ -4,9 +4,17 @@ import json
 import numpy as np
 import tensorflow as tf
 
-from TFUtils import load_data_set_path_dict
-
 # TODO: Extract some functionality out of children classes into parent
+
+def load_data_set_path_dict():
+    with open(os.path.join(os.environ['DCNN_DATASETS_PATH'], 'od_ds_paths.json'), 'r') as f:
+        ds_path_dict = json.load(f)
+    return ds_path_dict
+
+def load_model_path_dict():
+    with open(os.path.join(os.environ['TF_OD_MODEL_ROOT'], 'tf_odm_paths.json'), 'r') as f:
+        model_path_dict = json.load(f)
+    return model_path_dict
 
 class DataSet:
     """ Class to represent a Data Set created, and annotated by IMPL (ie. racoon_data_set)
