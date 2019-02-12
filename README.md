@@ -1,12 +1,12 @@
 # IMPL TensorFlow Utilities
 
-This repository contains the Python scripts and libraries needed to train, evaluate, and deploy Deep Convolutional Neural Network architectures using the TensorFlow library. These tools aim to make it easier to design, implement, and train models quickly by making easier to work with data sets. This is achieved by abstracting the concept of a data set to allow machine learning engineers to focus on model development instead of data wrangling.
+This repository contains the Python scripts and libraries needed to train, evaluate, and deploy Deep Convolutional Neural Network architectures using the TensorFlow library. These tools aim to make it easier to design, implement, and train models quickly by making easier to work with data sets. This is achieved by abstracting and encapsulating a data set into a Python class object, allowing machine learning engineers to focus on model development instead of data wrangling.
 
 ## General Installation and Set Up
 
-These tools require Python 3.6 along with the Pip package manager. Python package requirements can be installed using the following commands. See here for first time set up.
+These tools require Python 3.6 along with the Pip package manager. Python package requirements can be installed using the following commands. Follow [these instructions](http://link/TensorFlow-Tools/tensorflow_utilities#first-time-installation-and-set-up) for first time machine set up.
 
-### Create Python Virtual Environment and Project Set Up
+### Create Python Virtual Environment and Set Up Project
 The following commands,
   1. Clone the TensorFlow Utilities repository
   2. Create a virtual environment
@@ -28,7 +28,7 @@ $ pip install -r requirements.txt
 $ deactivate
 ```
 
-### Test for Proper Set Up
+### Run Tests for Proper Set Up
 
 ```bash
 $ source tf-util-env/bin/activate
@@ -38,13 +38,21 @@ $ python scripts/test.py --all
 $ deactivate
 ```
 
-## Usage
+## General Usage
 
-### DataSet
+### Data Set Creation
 
-#### Creation
+### Training
 
-#### DataSet Class Methods
+### Evaluation
+
+### Inference
+
+## APIs
+
+### DataSets
+
+### IMPLModels
 
 ## First Time Installation and Set Up
 
@@ -57,7 +65,7 @@ Use these instructions to set up this repository for the first time on a system.
 ```bash
 $ cd /some/path/tensorflow/
 
-$ git clone https://github.com/tensorflow/models.git
+$ git clone https://github.com/TCNJ-ECE-IMPL/models.git
 ```
 
 2. Create a directory to contain any future data sets. This directory should be able to allocate a large amount of storage.
@@ -79,4 +87,4 @@ $ export PYTHONPATH=$PYTHONPATH:\
 $ export DCNN_DATASETS_PATH=/some/path/tensorflow/datasets/
 ```
 
-The paths specified should match the `some/path` placeholders set in step 1 and 2 above. After completion restart your shell for changes to take effect.
+The paths specified should match the `some/path` placeholders set in step 1 and 2 above. After completion restart your shell for changes to take effect. Once these steps are complete [these steps](http://link/TensorFlow-Tools/tensorflow_utilities#general-installation-and-set-up) can be followed to install TensorFlow Utilities in your home directory.
