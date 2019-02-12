@@ -13,7 +13,6 @@ The following commands,
   3. Install the Python package pre-requisites into your virtual environment
   4. Deactivate the virtual environment
 
-
 ```bash
 $ git clone http://link.tcnj.edu/TensorFlow-Tools/tensorflow_utilities.git
 
@@ -27,7 +26,6 @@ $ pip install -r requirements.txt
 
 $ deactivate
 ```
-
 
 ### Test for Proper Set Up
 
@@ -64,6 +62,7 @@ $ git clone https://github.com/tensorflow/models.git
 ```
 
 2. Create a directory to contain any future data sets. This directory should be able to allocate a large amount of storage.
+
 ```bash
 $ mdkdir /some/path/DataSets
 ```
@@ -71,6 +70,7 @@ $ mdkdir /some/path/DataSets
 ### Set Environment Variables
 
 To set these environment variable as a SYSTEM environment variable modify the file `/etc/profile` (or `~/.bash_profile` for USER environment variable) to include the following
+
 ```bash
 $ export PYTHONPATH=$PYTHONPATH:\
   /some/path/tensorflow/models/:\
@@ -79,4 +79,5 @@ $ export PYTHONPATH=$PYTHONPATH:\
   /some/path/tensorflow/models/research/gan
 $ export DCNN_DATASETS_PATH=/some/path/tensorflow/datasets/
 ```
+
 The paths specified should match the `some/path` placeholders set in step 1 and 2 above. After completion restart your shell for changes to take effect.
