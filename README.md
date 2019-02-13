@@ -18,8 +18,12 @@ The following commands,
 cd ~/some/project/path
 git clone http://link.tcnj.edu/TensorFlow-Tools/tensorflow_utilities.git
 python3 -m venv tf-util-env
-source ./tf-util-env/bin/activate
-pip install -r requirements.txt
+source tf-util-env/bin/activate
+pip install -r tensorflow_utilities/pre_requisites.txt
+# For CPU version of TensorFlow
+pip install -r tensorflow_utilities/requirements_cpu.txt
+# or for GPU enabled TensorFlow
+pip install -r tensorflow_utilities/requirements_gpu.txt
 deactivate
 ```
 
