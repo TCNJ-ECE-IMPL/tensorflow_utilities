@@ -1,6 +1,6 @@
 # TensorFlow Utilities Installation
 
-These tools require Python 3.6 along with the Pip package manager. Python package requirements can be installed using the following commands. Follow [these instructions](##first-time-installation-and-set-up-procedure) for first time machine set up.
+These tools require Python 3.6 along with the Pip package manager. Python package requirements can be installed using the following commands. Follow [these instructions](#first-time-installation-and-set-up-procedure) for first time machine set up.
 
 ## General Installation Procedure
 
