@@ -19,7 +19,7 @@ cd ~/some/project/path
 git clone http://link.tcnj.edu/TensorFlow-Tools/tensorflow_utilities.git
 python3 -m venv tf-util-env
 source tf-util-env/bin/activate
-pip install -r tensorflow_utilities/pre_requisites.txt
+pip install -r tensorflow_utilities/prerequisites.txt
 # For CPU version of TensorFlow
 pip install -r tensorflow_utilities/requirements_cpu.txt
 # or for GPU enabled TensorFlow
@@ -101,7 +101,8 @@ Use these instructions to set up this repository for the first time on a system.
     cd /some/path/tensorflow
     git clone https://github.com/cocodataset/cocoapi.git
     cd cocoapi/PythonAPI
-    make
+    sudo make
+    sudo make install
     cp -r pycocotools /some/path/tensorflow/models/research/
     ```
 
