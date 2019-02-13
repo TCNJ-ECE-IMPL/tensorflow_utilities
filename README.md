@@ -60,63 +60,63 @@ Use these instructions to set up this repository for the first time on a system.
 1. Clone the TensorFlow Models Repository
 (Make sure you choose a permanent location, it will be annoying to change this later)
 
-```bash
-cd some/path
-mkdir tensorflow
-cd /some/path/tensorflow/
-git clone https://github.com/TCNJ-ECE-IMPL/models.git
-```
+    ```bash
+    cd some/path
+    mkdir tensorflow
+    cd /some/path/tensorflow/
+    git clone https://github.com/TCNJ-ECE-IMPL/models.git
+    ```
 
 2. Check to see if Google's Protobuf is installed with
 
-```bash
-which protoc
-```
+    ```bash
+    which protoc
+    ```
 
-If command cannot be found follow these steps, otherwise they can be skipped
+    If command cannot be found follow these steps, otherwise they can be skipped
 
-```bash
-cd /some/path/tensorflow/
-wget https://github.com/google/protobuf/releases/download/v3.4.1/protobuf-cpp-3.4.1.tar.gz
-tar -zxvf protobuf-cpp-3.4.1.tar.gz
-sudo mv protobuf-3.4.1 /usr/local/bin
-cd /usr/local/bin/protobuf-3.4.1
-./configure
-make
-make install
-protoc --version
-```
+    ```bash
+    cd /some/path/tensorflow/
+    wget https://github.com/google/protobuf/releases/download/v3.4.1/protobuf-cpp-3.4.1.tar.gz
+    tar -zxvf protobuf-cpp-3.4.1.tar.gz
+    sudo mv protobuf-3.4.1 /usr/local/bin
+    cd /usr/local/bin/protobuf-3.4.1
+    ./configure
+    make
+    make install
+    protoc --version
+    ```
 
-Should return `>> libprotoc 3.4.0`. Note some errors during `$ make install` are OK.
+    Should return `>> libprotoc 3.4.0`. Note some errors during `$ make install` are OK.
 
 3. COCO API Installation
 
-COCO APIs are needed for COCO evalutation methods, which are common eval metrics used to compare model performance.
+    COCO APIs are needed for COCO evalutation methods, which are common eval metrics used to compare model performance.
 
-```bash
-cd /some/path/tensorflow
-git clone https://github.com/cocodataset/cocoapi.git
-cd cocoapi/PythonAPI
-make
-cp -r pycocotools /some/path/tensorflow/models/research/
-```
+    ```bash
+    cd /some/path/tensorflow
+    git clone https://github.com/cocodataset/cocoapi.git
+    cd cocoapi/PythonAPI
+    make
+    cp -r pycocotools /some/path/tensorflow/models/research/
+    ```
 
 4. Models Protobuf Compilation
 
-The Tensorflow Object Detection API uses Protobufs to configure model and training parameters. Before the framework can be used, the Protobuf libraries must be compiled. This should be done by running the following command from the `/some/path/tensorflow/models/research/` directory:
+    The Tensorflow Object Detection API uses Protobufs to configure model and training parameters. Before the framework can be used, the Protobuf libraries must be compiled. This should be done by running the following command from the `/some/path/tensorflow/models/research/` directory:
 
-```bash
-cd /some/path/tensorflow/models/research
-protoc object_detection/protos/*.proto --python_out=.
-```
+    ```bash
+    cd /some/path/tensorflow/models/research
+    protoc object_detection/protos/*.proto --python_out=.
+    ```
 
 5. Set Up Data Sets Directory
 
-Create a directory to contain any future data sets. This directory should be able to allocate a large amount of storage.
+    Create a directory to contain any future data sets. This directory should be able to allocate a large amount of storage.
 
-```bash
-mdkdir /some/path/tensorflow/DataSets
-```
+    ```bash
+    mdkdir /some/path/tensorflow/DataSets
+    ```
 
 ### Set Environment Variables
 
