@@ -110,7 +110,7 @@ cd /some/path/tensorflow/models/research
 protoc object_detection/protos/*.proto --python_out=.
 ```
 
-2. Set Up Data Sets Directory
+5. Set Up Data Sets Directory
 
 Create a directory to contain any future data sets. This directory should be able to allocate a large amount of storage.
 
@@ -129,6 +129,13 @@ export PYTHONPATH=$PYTHONPATH:\
   /some/path/tensorflow/models/research/slim:\
   /some/path/tensorflow/models/research/gan
 export DCNN_DATASETS_PATH=/some/path/tensorflow/datasets/
+```
+
+### Test Software Installation and Set Up
+
+```bash
+# From /some/path/tensorflow/models/research/
+python object_detection/builders/model_builder_test.py
 ```
 
 The paths specified should match the `some/path` placeholders set in step 1 and 2 above. After completion restart your shell for changes to take effect. Once these steps are complete [these steps](#general-installation-and-set-up) can be followed to install TensorFlow Utilities in your home directory.

@@ -2,7 +2,7 @@ import os
 import json
 
 def load_data_set_path_dict():
-    with open(os.path.join(os.environ['OD_DS_ROOT'], 'od_ds_paths.json'), 'r') as f:
+    with open(os.path.join(os.environ['DCNN_DATASETS_PATH'], 'od_ds_paths.json'), 'r') as f:
         ds_path_dict = json.load(f)
     return ds_path_dict
 
