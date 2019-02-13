@@ -6,6 +6,8 @@ This repository contains the Python scripts and libraries needed to train, evalu
 
 These tools require Python 3.6 along with the Pip package manager. Installation instructions can be found [here](doc/INSTALLATION.md). If installing for the first time on the machine (not an IMPL Linux workstation) then follow the "First Time Installation and Set Up Procedure" section first, then follow the "General Installation Procedure".
 
+The output should say all tests have been passed.
+
 ## General Usage
 
 ### Data Set Creation
