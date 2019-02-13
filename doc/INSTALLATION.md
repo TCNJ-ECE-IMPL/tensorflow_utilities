@@ -71,4 +71,4 @@ $ export PYTHONPATH=$PYTHONPATH:\
 $ export DCNN_DATASETS_PATH=/some/path/tensorflow/datasets/
 ```
 
-The paths specified should match the `some/path` placeholders set in step 1 and 2 above. After completion restart your shell for changes to take effect. Once these steps are complete [these steps](#general-installation-and-set-up-procedure) can be followed to install TensorFlow Utilities in your home directory.
+The paths specified should match the `some/path` placeholders set in step 1 and 2 above. After completion restart your shell for changes to take effect. Once these steps are complete [these steps](#general-installation-procedure) can be followed to install TensorFlow Utilities in your home directory.
