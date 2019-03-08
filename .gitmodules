@@ -1,0 +1,3 @@
+[submodule "scripts/TFUtils/models"]
+	path = scripts/TFUtils/models
+	url = https://github.com/TCNJ-ECE-IMPL/models.git

@@ -4,19 +4,18 @@ import cv2
 import shutil
 from tensorflow.examples.tutorials.mnist import input_data
 
-sys.path.append('../')
 from TFUtils.DataSets import ClassificationDataSet
 
 def test_data_set(data_dir):
 
-    print('-------------------------------------------------------------------')
+    print('-'*80)
     print('Extracting Images into directory structure')
     cls_dataset = ClassificationDataSet(
                                 data_set_name='Fashion-MNIST',
                                 data_set_description='Dataset created during testing of data set')
     cls_dataset.create_dir_structure(os.path.join(data_dir, cls_dataset.data_set_name))
     cls_data_dir = extract_classification_images(cls_dataset.data_set_dir+'/images/')
-    print('-------------------------------------------------------------------')
+    print('-'*80)
     print('Building Data Set: {}'.format(cls_dataset.data_set_name))
     cls_dataset.build_data_set(input_image_dir=cls_data_dir,
                                           output_dir=data_dir)
