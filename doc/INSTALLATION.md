@@ -7,7 +7,7 @@ These tools require Python 3.6 along with the Pip package manager. Python packag
 Follow the following instructions to install user project pre-requisites and to test set up.
 
 ```bash
-git -r clone http://link.tcnj.edu/TensorFlow-Tools/tensorflow_utilities.git
+git clone --recursive http://link.tcnj.edu/TensorFlow-Tools/tensorflow_utilities.git
 
 cd tensorflow_utilities
 

@@ -5,7 +5,7 @@ source tf-utils-venv/bin/activate
 
 # Installing Python package requirements
 pip install -r requirements_cpu.txt
-echo "\nPython Package Requirements Installed Sucessfully!!"
+echo "Python Package Requirements Installed Sucessfully!!"
 
 # Setting Up DataSet directory and setting environment variables
 mkdir DataSets
@@ -20,9 +20,9 @@ cd $TFUTILS_ROOT
 
 # Testing Installation
 python object_detection/model_lib_test.py
-echo "\nOfficial TensorFlow research tools have passed all tests!!"
+echo "Official TensorFlow research tools have passed all tests!!"
 python scripts/test.py --all
-echo "\nIMPL TensorFlow Utils have passed all tests!!"
+echo "IMPL TensorFlow Utils have passed all tests!!"
 
 # Deactivating Virtual Environment
 deactivate
