@@ -11,7 +11,7 @@ def test_data_set(data_dir):
     print('-'*80)
     print('Extracting Images into directory structure')
     cls_dataset = ClassificationDataSet(
-                                data_set_name='Fashion-MNIST',
+                                data_set_name='MNIST',
                                 data_set_description='Dataset created during testing of data set')
     cls_dataset.create_dir_structure(os.path.join(data_dir, cls_dataset.data_set_name))
     cls_data_dir = extract_classification_images(cls_dataset.data_set_dir+'/images/')

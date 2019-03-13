@@ -4,17 +4,7 @@ import json
 import numpy as np
 import tensorflow as tf
 
-# TODO: Extract some functionality out of children classes into parent
-
-def load_data_set_path_dict():
-    with open(os.path.join(os.environ['DCNN_DATASETS_PATH'], 'od_ds_paths.json'), 'r') as f:
-        ds_path_dict = json.load(f)
-    return ds_path_dict
-
-def load_model_path_dict():
-    with open(os.path.join(os.environ['TF_OD_MODEL_ROOT'], 'tf_odm_paths.json'), 'r') as f:
-        model_path_dict = json.load(f)
-    return model_path_dict
+# TODO: Improve error handling for loading in a data set
 
 class DataSet:
     """ Class to represent a Data Set created, and annotated by IMPL (ie. racoon_data_set)
@@ -59,10 +49,10 @@ class DataSet:
             setattr(self, key, value)
         return
     def __repr__(self):
-        print('Data Set Name: {}\nType: {}\nDecription: {}'.format(
+        return 'Data Set Name: {}\nType: {}\nDecription: {}'.format(
             self.data_set_name,
             self.data_set_type,
-            self.data_set_description))
+            self.data_set_description)
 
 
 class ObjectDetectionDataSet(DataSet):
@@ -106,6 +96,26 @@ class ClassificationDataSet(DataSet):
                          data_set_dir=kwargs.get('data_set_dir'))
 
         return
+
+    @property
+    def train_images(self):
+        images, _ = self.load_data_set_from_raw_images(phase='train')
+        return images
+
+    @property
+    def train_labels(self):
+        _, labels =  self.load_data_set_from_raw_images(phase='train')
+        return labels
+
+    @property
+    def test_images(self):
+        images, _ = self.load_data_set_from_raw_images(phase='test')
+        return images
+
+    @property
+    def test_labels(self):
+        _, labels = self.load_data_set_from_raw_images(phase='test')
+        return labels
 
     def load_data_set_as_tensors(self):
         try:
@@ -243,22 +253,21 @@ class ClassificationDataSet(DataSet):
                 result[phase][self.features['label']['name']] = labels
         return result
 
-    def load_data_set_from_csv(self, csv_filepath):
-        """ Not Implemented Yet """
-        self._csv_to_image_label_dict(csv_filepath)
-        return
-
-    def load_data_set_from_raw_images(self, top_dir):
+    def load_data_set_from_raw_images(self, phase):
         """ Function to load images and labels from a directory structure
 
         Parameters:
-            top_dir:    (str)
+            top_dir:    (str) Either 'test' or 'train'
 
         Returns:
              images:    ([ndarray])
              labels:    ([str])
         """
-        image_label_dict = self._get_image_label_dict(top_dir)
+        if not ((phase == 'test') or (phase == 'train')):
+            rasie('Argument Error . . . must provide either "test" or "train"')
+
+        image_dir = os.path.join(self.data_set_dir, 'images/{}/'.format(phase))
+        image_label_dict = self._get_image_label_dict(image_dir)
         images = []
         labels = []
         for image_path, cls in image_label_dict.items():
