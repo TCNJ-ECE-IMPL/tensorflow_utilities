@@ -168,7 +168,7 @@ class ClassificationDataSet(DataSet):
                 properties to a json file for later use
         """
 
-        assert os.path.exists(input_image_dir)
+        input_image_dir = os.path.join(self.data_set_dir, 'images')
         if output_dir:
             output_dir = os.path.join(output_dir, self.data_set_name)
         else:
@@ -185,8 +185,8 @@ class ClassificationDataSet(DataSet):
         for phase_dir in phase_dirs:
             # Load the images into memory in TFRecord format
             phase = os.path.basename(phase_dir[:-1] if phase_dir[-1]=='/' else phase_dir)
-
-            images, labels = self.load_data_set_from_raw_images(os.path.join(input_image_dir, phase_dir))
+            
+            images, labels = self.load_data_set_from_raw_images(phase)
 
             # Define the data sets classes and assert an error if a phase a different number of
             # classes that previously assumed
@@ -264,7 +264,7 @@ class ClassificationDataSet(DataSet):
              labels:    ([str])
         """
         if not ((phase == 'test') or (phase == 'train')):
-            rasie('Argument Error . . . must provide either "test" or "train"')
+            raise('Argument Error . . . must provide either "test" or "train"')
 
         image_dir = os.path.join(self.data_set_dir, 'images/{}/'.format(phase))
         image_label_dict = self._get_image_label_dict(image_dir)
