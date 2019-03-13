@@ -273,7 +273,7 @@ class ClassificationDataSet(DataSet):
         for image_path, cls in image_label_dict.items():
             labels.append(cls)
             try:
-                img_data = cv2.imread(image_path).astype(np.float32)
+                img_data = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
                 images.append(img_data)
             except:
                 raise(IOError, 'Could not read in image: {}'.format(image_path))
