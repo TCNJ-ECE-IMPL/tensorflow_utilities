@@ -212,7 +212,7 @@ class ClassificationDataSet(DataSet):
         with open(description_path, 'w') as fp:
             json.dump(ds_description_dict, fp)
 
-        print('Sucessyfully built data set assets')
+        print('Successfully built data set assets')
         return
 
     def load_data_set_from_TFRecordIO(self):
@@ -315,6 +315,8 @@ class ClassificationDataSet(DataSet):
         image_label_dict = {}
         classes = os.listdir(top_dir)
         for cls in classes:
+            if not os.path.isdir(os.path.join(top_dir,cls)):
+                continue
             images_list = os.listdir(os.path.join(top_dir, cls))
             for image_fname in images_list:
                 image_path = os.path.join(top_dir, cls, image_fname)

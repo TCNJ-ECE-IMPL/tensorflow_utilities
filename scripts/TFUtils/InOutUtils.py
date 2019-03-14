@@ -5,6 +5,8 @@ def load_data_set_path_dict():
     data_set_path = os.environ['DCNN_DATASETS_PATH']
     data_set_dict = {}
     for data_set in os.listdir(data_set_path):
+        if not os.path.isdir(os.path.join(data_set_path,data_set)):
+            continue
         data_set_desc = '{}/{}/annotations/data_set_description.json'.format(data_set_path, data_set)
         with open(data_set_desc, 'r') as f:
             data_set_dict[data_set] = json.load(f)
