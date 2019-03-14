@@ -30,21 +30,7 @@ from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
 def build_model():
     model = Sequential()
-    # add Convolutional layers
-    model.add(Conv2D(filters=32, kernel_size=(3,3), activation='relu', padding='same',
-                     input_shape=(28, 28, 1)))
-    model.add(MaxPooling2D(pool_size=(2,2)))
-    model.add(Conv2D(filters=64, kernel_size=(3,3), activation='relu', padding='same'))
-    model.add(MaxPooling2D(pool_size=(2,2)))
-    model.add(Conv2D(filters=64, kernel_size=(3,3), activation='relu', padding='same'))
-    model.add(MaxPooling2D(pool_size=(2,2)))
-    model.add(Flatten())
-    # Densely connected layers
-    model.add(Dense(128, activation='relu'))
-    # output layer
-    model.add(Dense(10, activation='softmax'))
-    # compile with adam optimizer & categorical_crossentropy loss function
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
     return model
 
 
@@ -71,7 +57,7 @@ if __name__ == '__main__':
         train_data.shape, len(eval_data)
     ))
 
-    model = build_model()
+
     print(model.summary())
 
     results = model.fit(train_data, train_labels,
