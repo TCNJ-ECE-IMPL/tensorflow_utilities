@@ -27,11 +27,7 @@ def parse_args():
 import keras
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-
-def build_model():
-    model = Sequential()
-
-    return model
+from IMPLModels.MNISTModel import MNISTModel
 
 
 if __name__ == '__main__':
@@ -57,9 +53,7 @@ if __name__ == '__main__':
         train_data.shape, len(eval_data)
     ))
 
+    model = MNISTModel()
+    # print(model.summary())
 
-    print(model.summary())
-
-    results = model.fit(train_data, train_labels,
-                        epochs=2, steps_per_epoch=1000, validation_steps=200,
-                        validation_data=(eval_data, eval_labels))
+    results = model.fit_data(train_data,train_labels,eval_data,eval_labels)
