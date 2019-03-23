@@ -2,9 +2,12 @@ import os
 import sys
 import time
 import argparse
+import importlib
 import numpy as np
 import tensorflow as tf
 
+import inspect
+import IMPLModels
 from TFUtils.DataSets import ClassificationDataSet
 from TFUtils.InOutUtils import load_data_set_path_dict
 
@@ -22,12 +25,15 @@ def parse_args():
                         choices=ds_options,
                         type=str)
 
-    return parser.parse_args()
+    rgroup.add_argument('--model',
+                        help='Model to use for training',
+                        required=True,
+                        choices=IMPLModels.__all__,
+                        type=str)
 
-import keras
-from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-from IMPLModels.MNISTModel import MNISTModel
+    args = parser.parse_args()
+
+    return args
 
 
 if __name__ == '__main__':
@@ -53,7 +59,9 @@ if __name__ == '__main__':
         train_data.shape, len(eval_data)
     ))
 
-    model = MNISTModel()
-    # print(model.summary())
+    print('----- Loading {}:'.format(args.model))
+    model = IMPLModels.load_model(args.model)
+    print(model)
 
+    print('----- Begining Training:')
     results = model.fit_data(train_data,train_labels,eval_data,eval_labels)
