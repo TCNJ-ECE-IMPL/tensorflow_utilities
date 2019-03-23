@@ -1,7 +1,9 @@
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
-class MNISTModel:
+from.IMPL_Models import ClassificationModel
+
+class MNISTModel(ClassificationModel):
     def __init__(self):
         self.arch = Sequential()
         # add Convolutional layers
