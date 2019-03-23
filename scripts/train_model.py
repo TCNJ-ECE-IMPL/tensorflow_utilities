@@ -7,7 +7,7 @@ import numpy as np
 import tensorflow as tf
 
 import inspect
-import IMPLModels
+import IMPL_Models
 from TFUtils.DataSets import ClassificationDataSet
 from TFUtils.InOutUtils import load_data_set_path_dict
 
@@ -28,7 +28,7 @@ def parse_args():
     rgroup.add_argument('--model',
                         help='Model to use for training',
                         required=True,
-                        choices=IMPLModels.__all__,
+                        choices=IMPL_Models.__all__,
                         type=str)
 
     args = parser.parse_args()
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     ))
 
     print('----- Loading {}:'.format(args.model))
-    model = IMPLModels.load_model(args.model)
+    model = IMPL_Models.load_model(args.model)
     print(model)
 
     print('----- Begining Training:')
