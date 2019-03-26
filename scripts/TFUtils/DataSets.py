@@ -18,7 +18,7 @@ class DataSet:
     """
     def __init__(self, data_set_type, data_set_name, data_set_description, data_set_dir=None):
         self.description_filename = 'data_set_description.json'
-        self.data_set_dir = os.path.join(os.environ['DCNN_DATASETS_PATH'], data_set_name)
+    
         if data_set_dir:
             self.data_set_dir = data_set_dir
             config_path = os.path.join(self.data_set_dir, 'annotations', self.description_filename)
@@ -26,6 +26,7 @@ class DataSet:
             return
 
         # Setting up basic data set properties
+        self.data_set_dir = os.path.join(os.environ['DCNN_DATASETS_PATH'], data_set_name)
         self.data_set_type = data_set_type
         self.data_set_name = data_set_name
         self.data_set_description = data_set_description
@@ -152,23 +153,28 @@ class ClassificationDataSet(DataSet):
         return
 
     @property
+    def image_dir(self):
+        return os.path.join(self.data_set_dir, 'images')
+    
+
+    @property
     def train_images(self):
-        images, _ = self.load_data_set_from_raw_images(self.data_set_dir, phase='train')
+        images, _ = self.load_data_set_from_raw_images(self.image_dir, phase='train')
         return images
 
     @property
     def train_labels(self):
-        _, labels =  self.load_data_set_from_raw_images(self.data_set_dir, phase='train')
+        _, labels =  self.load_data_set_from_raw_images(self.image_dir, phase='train')
         return labels
 
     @property
     def test_images(self):
-        images, _ = self.load_data_set_from_raw_images(self.data_set_dir, phase='test')
+        images, _ = self.load_data_set_from_raw_images(self.image_dir, phase='test')
         return images
 
     @property
     def test_labels(self):
-        _, labels = self.load_data_set_from_raw_images(self.data_set_dir, phase='test')
+        _, labels = self.load_data_set_from_raw_images(self.image_dir, phase='test')
         return labels
 
     @property
@@ -276,8 +282,14 @@ class ClassificationDataSet(DataSet):
             # Load from input dir
             images, labels = self.load_data_set_from_raw_images(input_image_dir, phase)
 
+
+            self.label_map = self.get_label_map(set(labels))
+
+            labels = [self.label_map[x] for x in labels]
+            self.num_classes = len(set(labels))
             # Save to image dir    
             self.write_raw_images(phase_dir, images, labels)
+
             print('Copied {} train images {} for Dataset usage'.format(len(images), phase.upper()))
             # Define the data sets classes and assert an error if a phase a different number of
             # classes that previously assumed
@@ -364,11 +376,17 @@ class ClassificationDataSet(DataSet):
         for image_path, cls in image_label_dict.items():
             labels.append(cls)
             try:
-                img_data = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+                img_data = cv2.imread(image_path, cv2.IMREAD_COLOR).astype(np.float32)
                 images.append(img_data)
             except:
                 raise(IOError, 'Could not read in image: {}'.format(image_path))
         return images, labels
+
+    def get_label_map(self, labels):
+        map = {}
+        for i, label in enumerate(labels):
+            map[label] = str(i)
+        return map
 
     def write_raw_images(self, output_dir, images, labels):
         [os.mkdir(os.path.join(output_dir, label)) for label in set(labels)]
@@ -378,7 +396,7 @@ class ClassificationDataSet(DataSet):
 
             filename = '{}/{}_{:08}.png'.format(label, label, i)
             outpath = os.path.join(output_dir, filename)
-            r = cv2.imwrite(outpath, image)
+            r = cv2.imwrite(outpath, image, )
             i = i + 1
 
         return
