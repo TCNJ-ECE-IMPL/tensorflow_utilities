@@ -252,14 +252,10 @@ class ClassificationDataSet(DataSet):
             - Writes data_set_description.json to output_dir/annotations/ which dumps this object's (ClassificationDataSet)
                 properties to a json file for later use
         """
-
-        input_image_dir = os.path.join(self.data_set_dir, 'images')
+        # Setting up output dirs
+        output_dir = self.data_set_dir
         if output_dir:
             output_dir = os.path.join(output_dir, self.data_set_name)
-        else:
-            # Setting up output dirs
-            output_dir = os.path.join(os.environ['DCNN_DATASETS_PATH'], self.data_set_name)
-
 
         if len(os.listdir(output_dir)):
             self.create_dir_structure(output_dir)
