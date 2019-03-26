@@ -9,8 +9,7 @@ echo "Python Package Requirements Installed Sucessfully!!"
 
 # Setting Up DataSet directory and setting environment variables
 mkdir DataSets
-export DCNN_DATASETS_PATH=$(pwd)/DataSets/
-export TFUTILS_ROOT=$(pwd)
+source activate.sh
 
 # Building protobufs
 cd scripts/TFUtils/models/research/
