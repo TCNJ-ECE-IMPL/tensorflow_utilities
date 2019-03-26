@@ -68,12 +68,57 @@ class ObjectDetectionDataset(DataSet):
     def build_data_set(self, output_dir):
         return
 
+class KerasDataset(DataSet):
+    def __init__(self, data_set_type=None, data_set_name=None, data_set_description=None, **kwargs):
+        data_set_type = 'classification'
+
+        super().__init__(data_set_type=data_set_type,
+                         data_set_name=data_set_name,
+                         data_set_description=data_set_description,
+                         data_set_dir=kwargs.get('data_set_dir'))
+
+        self.train_dir = os.path.join(self.data_set_dir, 'train')
+        self.validation_dir = os.path.join(self.data_set_dir, 'validation')
+
+        return
+
+    def get_generators(self, preprocess_input, batch_size):
+        self.image_data_gen = self.get_image_generator(preprocess_input)
+        return self.train_generator, self.validation_generator
+
+    def get_train_generator(self):
+        self.train_generator = self.image_data_gen.flow_from_directory(
+            self.train_dir,
+            target_size=(self.img_hgt, self.img_wid),
+		    batch_size=32,
+		    class_mode='categorical',
+            shuffle=True,
+            subset='training')
+        return train_generator
+
+    def validation_generator(self):
+        self.validation_generator = image_data_gen.flow_from_directory(
+            self.validation_dir,
+            target_size=(IMG_HGT, IMG_WID),
+            batch_size=32,
+            class_mode='categorical',
+            shuffle=False,
+            subset='validation')
+        return validation_generator
+
+    def get_image_generator(self, preprocess_input, val_split=None):
+        image_data_gen = ImageDataGenerator(
+            preprocessing_function=preprocess_input,
+            validation_split=val_spit)
+        return image_data_gen
+
+
 class ClassificationDataSet(DataSet):
     """ Data Set Object to represent a Classification Data Set (derived from DataSets.DataSet object)
 
     Properties:
         data_set_name:          (str)   Data set name (should be unique and descriptive)
-        ~~data_set_type:          (str)   Data set type (IMPL tf tools support classification only atm)~~
+        data_set_type:          (str)   Data set type (IMPL tf tools support classification only atm)~~
         data_set_description:   (str)   Data set description can be provided to give more detail on the data
         classes:                (list)  List of unique class ids gathered from data set creation
         features:               (dict)  Dict of feature details to use when extracting record from the TFRecord
@@ -94,6 +139,10 @@ class ClassificationDataSet(DataSet):
                          data_set_name=data_set_name,
                          data_set_description=data_set_description,
                          data_set_dir=kwargs.get('data_set_dir'))
+
+        self.image_data_gen = None
+        self.train_dir = os.path.join(self.data_set_dir, 'train')
+        self.validation_dir = os.path.join(self.data_set_dir, 'validation')
 
         return
 
@@ -116,6 +165,37 @@ class ClassificationDataSet(DataSet):
     def test_labels(self):
         _, labels = self.load_data_set_from_raw_images(phase='test')
         return labels
+
+    @property
+    def train_generator(self):
+        self.train_generator = self.image_data_gen.flow_from_directory(
+            self.train_dir,
+            target_size=(self.img_hgt, self.img_wid),
+		    batch_size=32,
+		    class_mode='categorical',
+            shuffle=True)
+        return train_generator
+
+    @property
+    def validation_generator(self):
+        self.validation_generator = self.image_data_gen.flow_from_directory(
+            self.validation_dir,
+            target_size=(self.img_hgt, self.img_wid),
+            batch_size=32,
+            class_mode='categorical',
+            shuffle=False)
+        return validation_generator
+
+    def get_image_data_generator(self, preprocess_input, val_split=None):
+        return ImageDataGenerator(preprocessing_function=preprocess_input)
+
+    def get_generators(self, preprocess_input):
+        if not self.image_data_gen:
+            self.image_data_gen = get_image_generator(preprocess_input)
+
+        for phase in self.phase_dirs:
+            continue
+        return self.train_generator, self.validation_generator
 
     def load_data_set_as_tensors(self):
         try:

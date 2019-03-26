@@ -37,9 +37,11 @@ def parse_args():
                         required=True,
                         type=str)
 
-    rgroup.add_argument('--output_dir',
+    ogroup = parser.add_argument_group('Optional Arguments')
+
+    ogroup.add_argument('--output_dir',
                         help='Data will be written to this directory',
-                        required=True,
+                        required=False,
                         type=str)
 
     return parser.parse_args()
@@ -53,6 +55,6 @@ if __name__ == '__main__':
         classDS = ClassificationDataSet(data_set_name=args.data_set_name,
                                         data_set_type=args.data_set_type,
                                         data_set_description='Description')
-                                        
+
         classDS.build_data_set(input_image_dir=args.input_image_dir,
                                output_dir=args.output_dir)

@@ -7,7 +7,7 @@ import numpy as np
 import tensorflow as tf
 
 import inspect
-import IMPLModels
+import IMPL_Models
 from TFUtils.DataSets import ClassificationDataSet
 from TFUtils.InOutUtils import load_data_set_path_dict
 
@@ -28,7 +28,7 @@ def parse_args():
     rgroup.add_argument('--model',
                         help='Model to use for training',
                         required=True,
-                        choices=IMPLModels.__all__,
+                        choices=IMPL_Models.__all__,
                         type=str)
 
     args = parser.parse_args()
@@ -48,20 +48,18 @@ if __name__ == '__main__':
     train_data = np.asarray(np.expand_dims(dataset.train_images, axis=3))
     train_labels = tf.one_hot(
         indices=np.asarray(dataset.train_labels).astype(np.int32),
-        depth=10)
+        depth=dataset.num_classes)
 
-    eval_data = np.asarray(np.expand_dims(dataset.test_images, axis=3))
-    eval_labels = tf.one_hot(
+    val_data = np.asarray(np.expand_dims(dataset.test_images, axis=3))
+    val_labels = tf.one_hot(
         indices=np.asarray(dataset.test_labels).astype(np.int32),
-        depth=10)
+        depth=dataset.num_classes)
 
     print('----- Images Loaded: \nTrain: {}\nTest: {}'.format(
-        train_data.shape, len(eval_data)
+        len(train_data), len(val_data)
     ))
 
-    print('----- Loading {}:'.format(args.model))
-    model = IMPLModels.load_model(args.model)
+    model = IMPL_Models.load_model(args.model)
     print(model)
 
-    print('----- Begining Training:')
-    results = model.fit_data(train_data,train_labels,eval_data,eval_labels)
+    results = model.fit_data(train_data, train_labels, val_data, val_labels)

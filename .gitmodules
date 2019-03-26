@@ -1,3 +1,6 @@
 [submodule "scripts/TFUtils/models"]
 	path = scripts/TFUtils/models
 	url = https://github.com/TCNJ-ECE-IMPL/models.git
+[submodule "scripts/IMPL_Models"]
+	path = scripts/IMPL_Models
+	url = http://link.tcnj.edu/maxwels2/IMPL_Models.git
