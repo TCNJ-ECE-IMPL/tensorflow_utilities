@@ -253,9 +253,11 @@ class ClassificationDataSet(DataSet):
                 properties to a json file for later use
         """
         # Setting up output dirs
-        output_dir = self.data_set_dir
-        if output_dir:
+
+        if output_dir not None:
             output_dir = os.path.join(output_dir, self.data_set_name)
+        else:
+            output_dir = self.data_set_dir
 
         if len(os.listdir(output_dir)):
             self.create_dir_structure(output_dir)
