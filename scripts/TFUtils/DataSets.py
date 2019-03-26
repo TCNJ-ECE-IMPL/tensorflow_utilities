@@ -259,7 +259,7 @@ class ClassificationDataSet(DataSet):
         else:
             output_dir = self.data_set_dir
 
-        if len(os.listdir(output_dir)):
+        if not len(os.listdir(output_dir)):
             self.create_dir_structure(output_dir)
         # Load image file names based on directory structure
         # Loop through phases in 'input_image_dir/' aka train/test/eval
