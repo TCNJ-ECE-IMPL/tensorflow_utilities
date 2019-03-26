@@ -18,6 +18,7 @@ class DataSet:
     """
     def __init__(self, data_set_type, data_set_name, data_set_description, data_set_dir=None):
         self.description_filename = 'data_set_description.json'
+        self.data_set_dir = os.path.join(os.environ['DCNN_DATASETS_PATH'], data_set_name)
         if data_set_dir:
             self.data_set_dir = data_set_dir
             config_path = os.path.join(self.data_set_dir, 'annotations', self.description_filename)
