@@ -278,7 +278,7 @@ class ClassificationDataSet(DataSet):
 
             # Save to image dir    
             self.write_raw_images(phase_dir, images, labels)
-            print('Copied {} train images {} for Dataset usage'.format(len(images)phase.upper()))
+            print('Copied {} train images {} for Dataset usage'.format(len(images), phase.upper()))
             # Define the data sets classes and assert an error if a phase a different number of
             # classes that previously assumed
             if self.classes==[]:
