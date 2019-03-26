@@ -254,7 +254,7 @@ class ClassificationDataSet(DataSet):
         """
         # Setting up output dirs
 
-        if output_dir
+        if output_dir:
             output_dir = os.path.join(output_dir, self.data_set_name)
         else:
             output_dir = self.data_set_dir
