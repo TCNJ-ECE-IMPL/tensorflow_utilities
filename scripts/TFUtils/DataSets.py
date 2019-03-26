@@ -55,12 +55,12 @@ class DataSet:
             self.data_set_description)
 
 
-class ObjectDetectionDataSet(DataSet):
+class ObjectDetectionDataset(DataSet):
     """ Object Detectiopn Data Set Class to represent the data set (derived from DatSets.DataSet class)
 
     """
     def __init__(self, data_set_name, data_set_type, data_set_description, num_classes):
-        super(Dataset, self).__init__(data_set_name, data_set_type, data_set_description)
+        super(ObjectDetectionDataset, self).__init__(data_set_name, data_set_type, data_set_description)
         self.num_classes = num_classes
         self.sub_dirs = []
         return
@@ -185,7 +185,7 @@ class ClassificationDataSet(DataSet):
         for phase_dir in phase_dirs:
             # Load the images into memory in TFRecord format
             phase = os.path.basename(phase_dir[:-1] if phase_dir[-1]=='/' else phase_dir)
-            
+
             images, labels = self.load_data_set_from_raw_images(phase)
 
             # Define the data sets classes and assert an error if a phase a different number of

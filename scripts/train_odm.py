@@ -10,18 +10,13 @@ def parse_args():
 
     rgroup = parser.add_argument_group('Required Arguments')
 
-    ds_choices = load_data_set_path_dict().keys()
-    model_choices = load_model_path_dict().keys()
+    ds_options = [x for x in os.listdir(os.environ['DCNN_DATASETS_PATH'])]
 
-    rgroup.add_argument('--data_set_name',
+    #model_choices = load_model_path_dict().keys()
+
+    rgroup.add_argument('--dataset',
                         help='Select ssd_mobilenet_v1_exported_graph set to train model on. Options are listed, to add ssd_mobilenet_v1_exported_graph set follow other instructions',
-                        choices=ds_choices,
-                        required=True,
-                        type=str)
-
-    rgroup.add_argument('--model_name',
-                        help='Select a model to train on. Must choose one of the available choices, and it must match the model in pipeline_config_path',
-                        choices=model_choices,
+                        choices=ds_options,
                         required=True,
                         type=str)
 
@@ -47,24 +42,33 @@ def parse_args():
 
     ogroup = parser.add_argument_group('Optional Arguments')
 
-    ogroup.add_argument('--fine_tune',
-                        help='Default is [True] which trains model from a pre-trained state, if [False] model is trained from scratch',
-                        default=True,
+    ogroup.add_argument('--fine_tune_dir',
+                        help='Path to directory containing pretrained model checkpoints',
+                        default='',
                         required=False,
-                        type=bool)
-    return parser.parse_args()
+                        type=str)
+
+    args = parser.parse_args()
+
+    ds_info = load_data_set_path_dict()[args.dataset]
+    if ds_info['data_set_type'] != 'object_detection':
+        assert('Dataset TypeError: Select a dataset for object detection')
+    return args
 
 
 if __name__ == '__main__':
     args = parse_args()
     # Defining the output_path that the pipeline config will be written to
     pipeline_out_path = os.path.join(args.exp_dir, 'pipeline.config')
-    params_proto = config_odm_run(ds_name=args.data_set_name,
-                                  model_name=args.model_name,
-                                  pipline_config_path=args.pipeline_config_path,
-                                  fine_tune=args.fine_tune)
+
+    dataset_dir = os.path.join(os.environ['DCNN_DATASETS_PATH'], args.dataset)
+
+    params_proto = config_odm_run(pipline_config_path=args.pipeline_config_path,
+                                  dataset_path=dataset_dir,
+                                  fine_tune_dir=args.fine_tune_dir)
 
     save_pipeline_config(params_proto, args.exp_dir)
+
     print('-'*50)
     print('Beginning Training, logging to {}'.format(args.exp_dir))
     train_odm(model_dir=args.exp_dir,
