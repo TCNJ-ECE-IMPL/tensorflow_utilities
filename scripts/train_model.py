@@ -4,6 +4,14 @@ import time
 import argparse
 import importlib
 import numpy as np
+from keras import backend as K
+import tensorflow as tf
+with K.tf.device('/gpu:1'):
+    config = tf.ConfigProto(intra_op_parallelism_threads=4,\
+        inter_op_parallelism_threads=4, allow_soft_placement=True,\
+        device_count = {'CPU' : 1, 'GPU' : 1})
+    session = tf.Session(config=config)
+    K.set_session(session)
 import tensorflow as tf
 
 import inspect
@@ -38,6 +46,7 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
+
 
     ds_info = load_data_set_path_dict()[args.dataset]
 
