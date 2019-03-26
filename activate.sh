@@ -16,3 +16,5 @@ export DCNN_DATASETS_PATH=/home/maxwels2/Documents/tensorflow_utilities/DataSets
 export TFUTILS_ROOT=/home/maxwels2/Documents/tensorflow_utilities
 export DCNN_DATASETS_PATH=/Users/maxwels2/Documents/Spring2019/research/tensorflow_utilities/DataSets/
 export TFUTILS_ROOT=/Users/maxwels2/Documents/Spring2019/research/tensorflow_utilities
+export DCNN_DATASETS_PATH=/Users/maxwels2/Documents/Spring2019/research/tensorflow_utilities/DataSets/
+export TFUTILS_ROOT=/Users/maxwels2/Documents/Spring2019/research/tensorflow_utilities

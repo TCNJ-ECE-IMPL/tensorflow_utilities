@@ -18,7 +18,7 @@ def test_data_set(data_dir):
     print('-'*80)
     print('Building Data Set: {}'.format(cls_dataset.data_set_name))
     cls_dataset.build_data_set(input_image_dir=cls_data_dir,
-                                          output_dir=data_dir)
+                               output_dir=data_dir)
     print('Everything OK so far ...')
 
     return

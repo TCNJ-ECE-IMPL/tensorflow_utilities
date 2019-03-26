@@ -33,12 +33,14 @@ def parse_args():
 def main(args):
 
     if args.all:
+
         if not args.save:
             dir = args.data_dir
         else:
             dir = os.environ['DCNN_DATASETS_PATH']
         if not os.path.exists(dir):
             os.mkdir(dir)
+
         test_data_set(dir)
 
         if not args.save:
