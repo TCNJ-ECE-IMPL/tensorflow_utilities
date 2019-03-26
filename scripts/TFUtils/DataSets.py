@@ -24,6 +24,7 @@ class DataSet:
             config_path = os.path.join(self.data_set_dir, 'annotations', self.description_filename)
             self._load_description_file_from_json(config_path)
             return
+
         # Setting up basic data set properties
         self.data_set_type = data_set_type
         self.data_set_name = data_set_name
@@ -140,6 +141,9 @@ class ClassificationDataSet(DataSet):
                          data_set_name=data_set_name,
                          data_set_description=data_set_description,
                          data_set_dir=kwargs.get('data_set_dir'))
+
+        if not os.path.exists(self.data_set_dir):
+            os.mkdir(self.data_set_dir)
 
         self.image_data_gen = None
         self.train_dir = os.path.join(self.data_set_dir, 'train')
