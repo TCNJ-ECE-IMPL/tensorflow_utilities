@@ -3,4 +3,4 @@
 	url = https://github.com/TCNJ-ECE-IMPL/models.git
 [submodule "scripts/IMPL_Models"]
 	path = scripts/IMPL_Models
-	url = http://link.tcnj.edu/maxwels2/IMPL_Models.git
+	url = https://github.com/TCNJ-ECE-IMPL/IMPL_Models.git
