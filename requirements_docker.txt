@@ -4,7 +4,7 @@ backcall==0.1.0
 certifi==2018.8.24
 colorama==0.4.0
 cycler==0.10.0
-Cython==0.29
+Cython
 decorator==4.3.0
 gast==0.2.0
 grpcio==1.15.0
@@ -12,6 +12,7 @@ h5py==2.8.0
 ipython==7.0.1
 ipython-genutils==0.2.0
 jedi==0.13.1
+keras==2.4.4
 Keras-Applications==1.0.6
 Keras-Preprocessing==1.0.5
 kiwisolver==1.0.1
@@ -31,6 +32,7 @@ python-dateutil==2.7.3
 pytz==2018.5
 simplegeneric==0.8.1
 six==1.11.0
+tensorflow-gpu==1.4.0
 tensorboard==1.11.0
 termcolor==1.1.0
 traitlets==4.3.2

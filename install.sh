@@ -1,12 +1,16 @@
 
 # Creating aand Activating Python Virtual Environment
-python3 -m venv tf-utils-venv
-source tf-utils-venv/bin/activate
+
+if ($0 != "requirements_docker.txt")
+then
+    python3 -m venv tf-utils-venv
+    source tf-utils-venv/bin/activate
+fi
 
 pip install Cython
 pip install opencv-python
 # Installing Python package requirements
-pip install -r requirements_gpu.txt
+pip install -r $0
 pip install keras
 echo "Python Package Requirements Installed Sucessfully!!"
 
