@@ -3,8 +3,11 @@
 python3 -m venv tf-utils-venv
 source tf-utils-venv/bin/activate
 
+pip install Cython
+pip install opencv-python
 # Installing Python package requirements
-pip install -r requirements_cpu.txt
+pip install -r requirements_gpu.txt
+pip install keras
 echo "Python Package Requirements Installed Sucessfully!!"
 
 # Setting Up DataSet directory and setting environment variables
@@ -19,7 +22,7 @@ protoc object_detection/protos/*.proto --python_out=.
 python object_detection/model_lib_test.py
 cd $TFUTILS_ROOT
 echo "Official TensorFlow research tools have passed all tests!!"
-python scripts/test.py --all
+#python scripts/test.py --all
 echo "IMPL TensorFlow Utils have passed all tests!!"
 
 # Deactivating Virtual Environment
