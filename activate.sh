@@ -4,6 +4,4 @@ export PYTHONPATH=$(pwd)/scripts/TFUtils/models/:$(pwd)/scripts/TFUtils/models/r
 source tf-utils-venv/bin/activate
 
 echo "Virtual Environment Activated . . ."
-export DCNN_DATASETS_PATH=$(pwd)/DataSets/
-export TFUTILS_ROOT=$(pwd)
-export TF_OD_MODEL_ROOT=~/Desktop/
+source ".env"
