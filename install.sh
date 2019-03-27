@@ -19,13 +19,13 @@ mkdir DataSets
 source activate.sh
 
 # Building protobufs
-cd scripts/TFUtils/models/research/
-protoc object_detection/protos/*.proto --python_out=.
+#cd scripts/TFUtils/models/research/
+#protoc object_detection/protos/*.proto --python_out=.
 
 # Testing Installation
-python object_detection/model_lib_test.py
-cd $TFUTILS_ROOT
-echo "Official TensorFlow research tools have passed all tests!!"
+#python object_detection/model_lib_test.py
+#cd $TFUTILS_ROOT
+#echo "Official TensorFlow research tools have passed all tests!!"
 #python scripts/test.py --all
 echo "IMPL TensorFlow Utils have passed all tests!!"
 
