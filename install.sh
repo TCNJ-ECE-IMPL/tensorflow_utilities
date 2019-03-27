@@ -1,7 +1,7 @@
 
 # Creating aand Activating Python Virtual Environment
 
-if ($0 != "requirements_docker.txt")
+if [$0 != "requirements_docker.txt"]
 then
     python3 -m venv tf-utils-venv
     source tf-utils-venv/bin/activate
