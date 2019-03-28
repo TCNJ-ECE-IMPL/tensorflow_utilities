@@ -57,24 +57,28 @@ class Discriminator:
         return train_history
 
     def fit_gen(self, train_dir, val_dir, batch_size):
+        num_train = len(os.listdir(train_dir)) - 2
+        num_val = (os.listdir(val_dir)) - 2
+
         gen = ImageDataGenerator()
         train_generator = gen.flow_from_directory(
             train_dir,
             target_size=(256, 256),
-            batch_size=16,
+            batch_size=batch_size,
             class_mode='binary'
         )
         val_generator = gen.flow_from_directory(
             val_dir,
             target_size=(256, 256),
-            batch_size=16,
+            batch_size=batch_size,
             class_mode='binary'
         )
         train_history = self.arch.fit_generator(
             train_generator,
-            steps_per_epoch=6000 // 16,
+            steps_per_epoch=(num_train // batch_size),
             epochs=1,
             validation_data=val_generator,
-            validation_steps=1000 // 16
+            validation_steps=(num_val // batch_size)
         )
+        
         return train_history
