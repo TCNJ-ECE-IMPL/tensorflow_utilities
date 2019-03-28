@@ -34,6 +34,7 @@ simplegeneric==0.8.1
 six==1.11.0
 termcolor==1.1.0
 traitlets==4.3.2
+tensorflow-gpu==1.13.1
 wcwidth==0.1.7
 Werkzeug==0.14.1
 wincertstore==0.2
