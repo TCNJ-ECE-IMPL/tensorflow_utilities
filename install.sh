@@ -1,7 +1,10 @@
-
 # Creating aand Activating Python Virtual Environment
 
-if [$0 != "requirements_docker.txt"]
+py_requirements = $0
+
+venv_ena = ($py_requirements != "requirements_docker.txt")
+
+if [venv_ena]]
 then
     python3 -m venv tf-utils-venv
     source tf-utils-venv/bin/activate
@@ -10,8 +13,9 @@ fi
 pip install Cython
 pip install opencv-python
 # Installing Python package requirements
-pip install -r $0
+pip install -r $py_requirements
 pip install keras
+pip install matplotlib
 echo "Python Package Requirements Installed Sucessfully!!"
 
 # Setting Up DataSet directory and setting environment variables
@@ -29,5 +33,9 @@ source activate.sh
 #python scripts/test.py --all
 echo "IMPL TensorFlow Utils have passed all tests!!"
 
-# Deactivating Virtual Environment
-deactivate
+
+if [venv_ena]
+then
+	# Deactivating Virtual Environment
+	deactivate
+fi
