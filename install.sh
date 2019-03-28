@@ -2,9 +2,9 @@
 
 py_requirements = $0
 
-VENV_ENA = $py_requirements != "requirements_docker.txt"
+venv_ena = $py_requirements != "requirements_docker.txt"
 
-if [$VENV_ENA]
+if [$venv_ena]
 then
     python3 -m venv tf-utils-venv
     source tf-utils-venv/bin/activate
@@ -34,7 +34,7 @@ source activate.sh
 echo "IMPL TensorFlow Utils have passed all tests!!"
 
 
-if [$VENV_ENA]
+if [$venv_ena]
 then
     # Deactivating Virtual Environment
     deactivate
