@@ -55,22 +55,22 @@ if __name__ == '__main__':
     print('----- Data Set: \n{}'.format(dataset))
 
     # Loading images as np arrays
-    train_data = np.asarray(dataset.train_images)
-    train_labels = tf.one_hot(
-        indices=np.asarray(dataset.train_labels).astype(np.int32),
-        depth=dataset.num_classes)
+    #train_data = np.asarray(dataset.train_images)
+    #train_labels = tf.one_hot(
+    #    indices=np.asarray(dataset.train_labels).astype(np.int32),
+    #     depth=dataset.num_classes)
 
-    val_data = np.asarray(dataset.test_images)
-    val_labels = tf.one_hot(
-        indices=np.asarray(dataset.test_labels).astype(np.int32),
-        depth=dataset.num_classes)
+    #val_data = np.asarray(dataset.test_images)
+    #val_labels = tf.one_hot(
+    #    indices=np.asarray(dataset.test_labels).astype(np.int32),
+    #    depth=dataset.num_classes)
 
-    print('----- Images Loaded: \nTrain: {}\nTest: {}'.format(
-        len(train_data), len(val_data)
-    ))
+    #print('----- Images Loaded: \nTrain: {}\nTest: {}'.format(
+        #len(train_data), len(val_data)
+    #))
 
     model = IMPL_Models.load_model(args.model)
-    print(model)
-    print(val_data.shape)
-    print(val_labels)
-    results = model.fit_data(train_data, train_labels, val_data, val_labels)
+    #print(model)
+    #print(val_data.shape)
+    #print(val_labels)
+    results = model.fit_gen(dataset.train_dir, dataset.validation_dir, 2)

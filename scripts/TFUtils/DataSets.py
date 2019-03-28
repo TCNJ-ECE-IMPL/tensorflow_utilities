@@ -18,7 +18,7 @@ class DataSet:
     """
     def __init__(self, data_set_type, data_set_name, data_set_description, data_set_dir=None):
         self.description_filename = 'data_set_description.json'
-    
+
         if data_set_dir:
             self.data_set_dir = data_set_dir
             config_path = os.path.join(self.data_set_dir, 'annotations', self.description_filename)
@@ -90,7 +90,7 @@ class KerasDataset(DataSet):
         return self.train_generator, self.validation_generator
 
     def get_train_generator(self):
-        self.train_generator = self.image_data_gen.flow_from_directory(
+        self.train_generator = image_data_gen.flow_from_directory(
             self.train_dir,
             target_size=(self.img_hgt, self.img_wid),
 		    batch_size=32,
@@ -147,15 +147,14 @@ class ClassificationDataSet(DataSet):
             os.mkdir(self.data_set_dir)
 
         self.image_data_gen = None
-        self.train_dir = os.path.join(self.data_set_dir, 'train')
-        self.validation_dir = os.path.join(self.data_set_dir, 'validation')
-
+        self.train_dir = os.path.join(self.data_set_dir, 'images/train')
+        self.validation_dir = os.path.join(self.data_set_dir, 'images/test')
         return
 
     @property
     def image_dir(self):
         return os.path.join(self.data_set_dir, 'images')
-    
+
 
     @property
     def train_images(self):
@@ -287,7 +286,7 @@ class ClassificationDataSet(DataSet):
 
             labels = [self.label_map[x] for x in labels]
             self.num_classes = len(set(labels))
-            # Save to image dir    
+            # Save to image dir
             self.write_raw_images(phase_dir, images, labels)
 
             print('Copied {} train images {} for Dataset usage'.format(len(images), phase.upper()))
