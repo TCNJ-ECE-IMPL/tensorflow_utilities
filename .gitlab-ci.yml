@@ -1,0 +1,17 @@
+image: nvidia/tensorflow:py3
+
+stages:
+    - build
+    - deploy
+
+install_dependancies:
+    stage: build
+    script: 
+        - bash install.sh
+
+push_to_github:
+    stage: deploy
+    script:
+        - git remote add github https://github.com/TCNJ-ECE-IMPL/tensorflow_utilities.git
+        - git push github master 
+    only: master
