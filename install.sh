@@ -13,7 +13,7 @@ fi
 pip install Cython
 pip install opencv-python
 # Installing Python package requirements
-pip install -r $py_requirements
+pip install -r $PY_REQ
 pip install keras
 pip install matplotlib
 echo "Python Package Requirements Installed Sucessfully!!"
