@@ -3,7 +3,7 @@
 
 PY_REQ=$1
 
-if [[ "$PY_REQ" == "requirements_docker.txt" ]]
+if [[ "$PY_REQ" != "requirements_docker.txt" ]]
 then
     echo "Docker Insall Detected"
     python3 -m venv tf-utils-venv
@@ -34,7 +34,7 @@ source activate.sh
 echo "IMPL TensorFlow Utils have passed all tests!!"
 
 
-if [[ "$PY_REQ" == "requirements_docker.txt" ]]
+if [[ "$PY_REQ" != "requirements_docker.txt" ]]
 then
     # Deactivating Virtual Environment
     deactivate
