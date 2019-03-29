@@ -4,11 +4,39 @@ This repository contains the Python scripts and libraries needed to train, evalu
 
 ## General Installation and Set Up
 
-These tools require Python 3.6 along with the Pip package manager. Installation instructions can be found [here](doc/INSTALLATION.md). 
+These tools require Python 3.6 along with the Pip package manager.
+
+```bash
+git clone --recursive http://link.tcnj.edu/TensorFlow-Tools/tensorflow_utilities.git
+
+cd tensorflow_utilities
+
+./install
+```
 
 ## General Usage
 
-### Working with IMPL_Models
+### Data Set Creation
+
+### Training
+
+### Evaluation
+
+### Inference
+
+## APIs
+
+### DataSets
+
+### IMPLModels
+
+IMPL_Models is a repository for holding the IMPLs deep learning models. This package can be added as a subtree to any project and facilitates easy Python `import`s as a Python package. To import a model into your program from the package see below. See the script `tensorflow_utilities/scripts/train_model.py` to see how we can import a model from the IMPL_Models package dynamically (based on user input).
+
+```python3
+from IMPL_Models import MobileNetModel
+
+model = MobileNetModel
+```
 
 Updating your local repo (pull)
 
@@ -24,17 +52,3 @@ Updating the remote repo (push)
 git subtree push --prefix=<path/to/submodule/with/trailing/slash/> <remote_tag> <branch>
 git subtree push --prefix=scripts/IMPL_Models/ impl-models master
 ```
-
-### Data Set Creation
-
-### Training
-
-### Evaluation
-
-### Inference
-
-## APIs
-
-### DataSets
-
-### IMPLModels
