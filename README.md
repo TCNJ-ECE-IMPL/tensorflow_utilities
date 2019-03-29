@@ -24,13 +24,42 @@ source activate
 
 ### Data Set Creation
 
-### Training
+To view the arguments required run
+```bash
+python scripts/create_data_set.py --h
+```
 
-### Evaluation
+Usage Example:
+```bash
+python scripts/create_data_set.py \
+	--data_set_type classification \
+	--data_set_name GrassWeeds \
+	--input_image_dir /home/data/images/GrassWeeds
+```
 
-### Inference
+### Model Training
 
-## APIs
+Now that we have created a dataset we can train a model on the dataset. There are a few pre-designed models that we can choose from or design our own. OPTIONAL: See the IMPL_Models section below to see how the package works.
+
+To view the arguments required to run
+```bash
+python scripts/train_model.py --h
+```
+
+Usage Example:
+```bash
+python scripts/train_model.py \
+	--dataset GrassWeeds \
+	--model Discriminator \
+	--epochs 10 \
+	--output_dir grass_weeds_train_test
+```
+
+### Model Evaluation
+
+### Model Inference
+
+## TensorFlow Utilities' APIs
 
 ### DataSets
 
@@ -43,6 +72,10 @@ from IMPL_Models import MobileNetModel
 
 model = MobileNetModel
 ```
+
+The IMPL_Models package utilizes a Git `subtree`. Below are commands to perform common operations on the `subtree` such as pulling and pushing to the remote
+
+Useful Link: https://andrey.nering.com.br/2016/git-submodules-vs-subtrees/
 
 Updating your local repo (pull)
 

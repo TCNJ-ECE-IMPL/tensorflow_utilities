@@ -2,7 +2,8 @@
 
 VENV_ACTIVATE=tf-utils-venv/bin/activate
 
-if [ -f "$VENV_ACTIVATE" ]; then
+if [ -f "$VENV_ACTIVATE" ]
+then
     echo "Python Virtual Environment Activated ..."
     source $VENV_ACTIVATE
 fi
