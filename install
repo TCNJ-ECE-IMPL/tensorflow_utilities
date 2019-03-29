@@ -5,7 +5,7 @@ PY_REQ=$1
 
 if [[ ! -f "$PY_REQ" ]]
 then
-    echo "Please specify Pip requirements files"
+    echo "Please specify Pip requirements files... Choose from the following"
     echo $(ls | grep "requirements")
     exit 1
 fi 
