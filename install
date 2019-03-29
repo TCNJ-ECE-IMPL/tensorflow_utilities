@@ -3,9 +3,16 @@
 
 PY_REQ=$1
 
+if [[ ! -f "$PY_REQ" ]]
+then
+    echo "Please specify Pip requirements files"
+    echo $(ls | grep "requirements")
+    exit 1
+fi 
+
 if [[ "$PY_REQ" != "requirements_docker.txt" ]]
 then
-    echo "Docker Insall Detected"
+    echo "Creating Python Virtual Environment"
     python3 -m venv tf-utils-venv
     source tf-utils-venv/bin/activate
 fi
@@ -20,7 +27,7 @@ echo "Python Package Requirements Installed Sucessfully!!"
 
 # Setting Up DataSet directory and setting environment variables
 mkdir DataSets
-source activate.sh
+source activate
 
 # Building protobufs
 #cd scripts/TFUtils/models/research/
