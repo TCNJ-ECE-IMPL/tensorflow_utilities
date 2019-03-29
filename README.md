@@ -2,7 +2,7 @@
 
 This repository contains the Python scripts and libraries needed to train, evaluate, and deploy Deep Convolutional Neural Network architectures using the TensorFlow library. These tools aim to make it easier to design, implement, and train models quickly by making easier to work with data sets. This is achieved by abstracting and encapsulating a data set into a Python class object, allowing machine learning engineers to focus on model development instead of data wrangling.
 
-## General Installation and Set Up
+## Installation
 
 These tools require Python 3.6 along with the Pip package manager.
 
@@ -15,6 +15,12 @@ cd tensorflow_utilities
 ```
 
 ## General Usage
+
+In order to use the scripts in this repo youll have to activate a Python Virtual Environment that was created during Installation. Activate the virtual env by.
+
+```bash
+source activate
+```
 
 ### Data Set Creation
 
