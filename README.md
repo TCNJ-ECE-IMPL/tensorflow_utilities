@@ -4,11 +4,26 @@ This repository contains the Python scripts and libraries needed to train, evalu
 
 ## General Installation and Set Up
 
-These tools require Python 3.6 along with the Pip package manager. Installation instructions can be found [here](doc/INSTALLATION.md). If installing for the first time on the machine (not an IMPL Linux workstation) then follow the "First Time Installation and Set Up Procedure" section first, then follow the "General Installation Procedure".
-
-The output should say all tests have been passed.
+These tools require Python 3.6 along with the Pip package manager. Installation instructions can be found [here](doc/INSTALLATION.md). 
 
 ## General Usage
+
+### Working with IMPL_Models
+
+Updating your local repo (pull)
+
+```bash
+git subtree pull --prefix=<path/to/submodule/with/trailing/slash/> <remote_tag> <branch>
+git subtree pull --prefix=scripts/IMPL_Models/ impl-models master
+```
+
+Updating the remote repo (push)
+
+```bash
+# After committing files
+git subtree push --prefix=<path/to/submodule/with/trailing/slash/> <remote_tag> <branch>
+git subtree push --prefix=scripts/IMPL_Models/ impl-models master
+```
 
 ### Data Set Creation
 
