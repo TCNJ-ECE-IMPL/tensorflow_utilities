@@ -1,3 +1,4 @@
+import os
 from keras import layers
 from keras.layers import Input, Dense, Reshape, Flatten, Embedding, Dropout
 from keras.layers import BatchNormalization
@@ -56,9 +57,7 @@ class Discriminator:
                                       validation_data=(test_data, test_labels))
         return train_history
 
-    def fit_gen(self, train_dir, val_dir, batch_size):
-        num_train = len(os.listdir(train_dir)) - 2
-        num_val = (os.listdir(val_dir)) - 2
+    def fit_gen(self, train_dir, val_dir, num_train, num_val, batch_size, epochs):
 
         gen = ImageDataGenerator()
         train_generator = gen.flow_from_directory(
@@ -76,9 +75,17 @@ class Discriminator:
         train_history = self.arch.fit_generator(
             train_generator,
             steps_per_epoch=(num_train // batch_size),
-            epochs=1,
+            epochs=epochs,
             validation_data=val_generator,
             validation_steps=(num_val // batch_size)
         )
         
         return train_history
+
+    def save(self, output_dir):
+        self.arch.save(os.path.join(output_dir,  'model.h5'))
+        return
+
+    def load(self, model_dir):
+        self.arch.load(os.path.join(model_dir, 'model.h5'))
+        return
