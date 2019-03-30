@@ -73,6 +73,7 @@ if __name__ == '__main__':
     print('----- Data Set: \n{}'.format(dataset))
 
     model = IMPL_Models.load_model(args.model)
+    print(model)
 
     results = model.fit_gen(
         train_dir=dataset.train_dir,

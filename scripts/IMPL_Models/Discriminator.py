@@ -18,32 +18,32 @@ class Discriminator:
 
         # Fix input_shape later
 
-        self.arch.add(Conv2D(32, 3, padding='same', strides=2, input_shape=(256, 256, 3)))
+        self.arch.add(Conv2D(32, 7, padding='same', strides=2, input_shape=(256, 256, 3)))
         self.arch.add(LeakyReLU(0.2))
-        self.arch.add(Dropout(0.4))
+        self.arch.add(Dropout(0.1))
 
-        self.arch.add(Conv2D(64, 3, padding='same', strides=1))
+        self.arch.add(Conv2D(64, 5, padding='same', strides=1))
         self.arch.add(LeakyReLU(0.2))
-        self.arch.add(Dropout(0.4))
+        self.arch.add(Dropout(0.1))
 
-        self.arch.add(Conv2D(128, 3, padding='same', strides=2))
+        self.arch.add(Conv2D(128, 3, padding='same', strides=1))
         self.arch.add(LeakyReLU(0.2))
-        self.arch.add(Dropout(0.4))
+        self.arch.add(Dropout(0.1))
 
         self.arch.add(Conv2D(256, 3, padding='same', strides=1))
         self.arch.add(LeakyReLU(0.2))
-        self.arch.add(Dropout(0.4))
+        self.arch.add(Dropout(0.1))
 
         self.arch.add(Flatten())
 
         # self.arch.add(Dense(128, activation='relu'))
-        self.arch.add(Dense(1, activation='sigmoid'))
+        self.arch.add(Dense(2, activation='sigmoid'))
 
         adam_lr = 0.0002
         adam_beta_1 = 0.5
 
         self.arch.compile(optimizer=Adam(lr=adam_lr, beta_1=adam_beta_1),
-                    loss='binary_crossentropy',
+                    loss='categorical_crossentropy',
                     metrics=['accuracy'])
 
         return
@@ -64,13 +64,13 @@ class Discriminator:
             train_dir,
             target_size=(256, 256),
             batch_size=batch_size,
-            class_mode='binary'
+            class_mode='categorical'
         )
         val_generator = gen.flow_from_directory(
             val_dir,
             target_size=(256, 256),
             batch_size=batch_size,
-            class_mode='binary'
+            class_mode='categorical'
         )
         train_history = self.arch.fit_generator(
             train_generator,
