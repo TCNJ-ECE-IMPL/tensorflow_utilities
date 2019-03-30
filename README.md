@@ -17,7 +17,7 @@ cd tensorflow_utilities
 ./install requirements_cpu.txt 		# For CPU only
 ```
 
-The install script does,
+The install script,
 1. Creates a new Python virtual environment
 2. Activated the virtual environment
 3. Installs necesary Python packages into the virtual environment
@@ -97,14 +97,14 @@ The IMPL_Models package utilizes a Git `subtree`. Below are commands to perform 
 
 Useful Link: https://andrey.nering.com.br/2016/git-submodules-vs-subtrees/
 
-Updating your local repo (pull)
+Updating your local subtree (pull)
 
 ```bash
 git subtree pull --prefix=<path/to/submodule/with/trailing/slash/> <remote_tag> <branch>
 git subtree pull --prefix=scripts/IMPL_Models/ impl-models master
 ```
 
-Updating the remote repo (push)
+Updating the remote subtree (push)
 
 ```bash
 # After committing files
