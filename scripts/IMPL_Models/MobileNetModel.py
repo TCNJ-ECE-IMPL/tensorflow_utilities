@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import os
 from keras.models import Model, load_model
 from keras.applications.mobilenet import MobileNet, preprocess_input
