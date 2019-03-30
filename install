@@ -38,7 +38,7 @@ source activate
 #cd $TFUTILS_ROOT
 #echo "Official TensorFlow research tools have passed all tests!!"
 #python scripts/test.py --all
-echo "IMPL TensorFlow Utils have passed all tests!!"
+#echo "IMPL TensorFlow Utils have passed all tests!!"
 
 
 if [[ "$PY_REQ" != "requirements_docker.txt" ]]
