@@ -17,7 +17,6 @@ class Discriminator:
         self.arch = Sequential()
 
         # Fix input_shape later
-
         self.arch.add(Conv2D(32, 7, padding='same', strides=2, input_shape=(256, 256, 3)))
         self.arch.add(LeakyReLU(0.2))
         self.arch.add(Dropout(0.1))
@@ -36,7 +35,6 @@ class Discriminator:
 
         self.arch.add(Flatten())
 
-        # self.arch.add(Dense(128, activation='relu'))
         self.arch.add(Dense(2, activation='sigmoid'))
 
         adam_lr = 0.0002
