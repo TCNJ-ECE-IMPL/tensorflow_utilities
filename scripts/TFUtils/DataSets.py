@@ -470,7 +470,7 @@ class ClassificationDataSet(DataSet):
 
 class SegmentationDataSet(DataSet):
     def __init__(self, data_set_type=None, data_set_name=None, data_set_description=None, **kwargs):
-        data_set_type = 'classification'
+        data_set_type = 'segmentation'
 
         super().__init__(data_set_type=data_set_type,
                          data_set_name=data_set_name,
@@ -517,8 +517,8 @@ class SegmentationDataSet(DataSet):
                     data/
                     images/
             - Writes phaseN.record to output_dir/data/phaseN.record for every phase in the input_image_dir. The .record
-                files contain records that have features that correspond to "image", and "label"
-            - Writes data_set_description.json to output_dir/annotations/ which dumps this object's (ClassificationDataSet)
+                files contain records that have features that correspond to "image", and "target"
+            - Writes data_set_description.json to output_dir/annotations/ which dumps this object's (SegmentationDataSet)
                 properties to a json file for later use
         """
         # Setting up output dirs
@@ -560,14 +560,14 @@ class SegmentationDataSet(DataSet):
         return
     
     def load_data_set_from_raw_images(self, top_dir, phase):
-        """ Function to load images and labels from a directory structure
+        """ Function to load images and targets from a directory structure
 
         Parameters:
             top_dir:    (str) Either 'test' or 'train'
 
         Returns:
              images:    ([ndarray])
-             labels:    ([str])
+             targets:    ([ndarray])
         """
         if not ((phase == 'test') or (phase == 'train')):
             raise('Argument Error . . . must provide either "test" or "train"')
