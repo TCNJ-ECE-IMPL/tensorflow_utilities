@@ -399,7 +399,7 @@ class ClassificationDataSet(DataSet):
             i = i + 1
 
         return
-
+    
     def write_record(self, output_path, images, labels, features):
         """ Function to Write a set of images and labels to a TF Record
 
@@ -467,3 +467,139 @@ class ClassificationDataSet(DataSet):
 
     def data_set_description_as_dict(self):
         return super().data_set_description_as_dict()
+
+class SegmentationDataSet(DataSet):
+    def __init__(self, data_set_type=None, data_set_name=None, data_set_description=None, **kwargs):
+        data_set_type = 'classification'
+
+        super().__init__(data_set_type=data_set_type,
+                         data_set_name=data_set_name,
+                         data_set_description=data_set_description,
+                         data_set_dir=kwargs.get('data_set_dir'))
+
+        if not os.path.exists(self.data_set_dir):
+            os.mkdir(self.data_set_dir)
+
+        self.image_data_gen = None
+        self.train_dir = os.path.join(self.data_set_dir, 'images/train')
+        self.validation_dir = os.path.join(self.data_set_dir, 'images/test')
+        return
+
+    def build_data_set(self, input_image_dir, output_dir=None):
+        """ Function to build a data set and format it so that way this class can read its descriptions, images, and
+            tf record files
+
+        Parameters:
+            input_image_dir:    (str) Directory path where the data files exist, must be in the following format
+                                input_image_dir/
+                                    phase1/
+                                        class1/
+                                            img1.jpg
+                                        class2/
+                                            dog.jpg
+                                    phase2/
+                                        class1/
+                                            cat.png
+                                        class2/
+                                            doggo.bmp
+
+                                Where phase1, phase2, etc are train, val, test (dont need all three) and class ids are
+                                subdirectories names.
+            output_dir:         (str) [Default=None] This causes the data set to be created and registered in the
+                                $OD_DS_ROOT directory
+
+        Returns:
+            This doesnt return anything but does have side effects,
+
+            - Creates a directory structure
+                output_dir/
+                    annotations/
+                    data/
+                    images/
+            - Writes phaseN.record to output_dir/data/phaseN.record for every phase in the input_image_dir. The .record
+                files contain records that have features that correspond to "image", and "label"
+            - Writes data_set_description.json to output_dir/annotations/ which dumps this object's (ClassificationDataSet)
+                properties to a json file for later use
+        """
+        # Setting up output dirs
+
+        if output_dir:
+            output_dir = os.path.join(output_dir, self.data_set_name)
+        else:
+            output_dir = self.data_set_dir
+
+        if not len(os.listdir(output_dir)):
+            self.create_dir_structure(output_dir)
+
+        # Load image file names based on directory structure
+        # Loop through phases in 'input_image_dir/' aka train/test/eval
+        # TF Record will saved as output_dir/data/phase.record
+        phase_dirs = os.listdir(input_image_dir)
+        for phase in phase_dirs:
+            # Load the images into memory from input dir
+            #phase = os.path.basename(phase_dir[:-1] if phase_dir[-1]=='/' else phase_dir)
+            phase_dir = os.path.join(self.data_set_dir, 'images/{}'.format(phase))
+            if not os.path.exists(phase_dir):
+                os.mkdir(phase_dir)
+
+            # Load from input dir
+            images, targets = self.load_data_set_from_raw_images(input_image_dir, phase)            
+
+            # Save to image dir
+            self.write_raw_images(phase_dir, images, targets)
+
+            print('Copied {} train images {} for Dataset usage'.format(len(images), phase.upper()))
+                    
+        # Write auxiliary files
+        ds_description_dict = self.data_set_description_as_dict()
+        description_path = os.path.join(output_dir, 'annotations', self.description_filename)
+        with open(description_path, 'w') as fp:
+            json.dump(ds_description_dict, fp)
+            
+        print('Successfully built data set assets')
+        return
+    
+    def load_data_set_from_raw_images(self, top_dir, phase):
+        """ Function to load images and labels from a directory structure
+
+        Parameters:
+            top_dir:    (str) Either 'test' or 'train'
+
+        Returns:
+             images:    ([ndarray])
+             labels:    ([str])
+        """
+        if not ((phase == 'test') or (phase == 'train')):
+            raise('Argument Error . . . must provide either "test" or "train"')
+
+        image_dir = os.path.join(top_dir, phase)
+        image_label_dict = self._get_image_label_dict(image_dir)
+        images = []
+        targets = []
+        for image_path, cls in image_label_dict.items():
+            try:
+                img_data = cv2.imread(image_path, cv2.IMREAD_COLOR).astype(np.float32)
+                images.append(img_data)                
+            except:
+                raise(IOError, 'Could not read in image: {}'.format(image_path))
+            try:
+                target_data = cv2.imread(image_path.split('.') + "_map.bmp", cv2.IMREAD_COLOR).astype(np.float32)
+                targets.append(target_data)
+            except:
+                raise(IOError, 'Could not read in image: {}'.format(image_path.split(.) + "_map.bmp"))
+        return images, targets
+
+    def write_raw_images(self, output_dir, images, targets):
+        
+        i = 0
+        for image, target in zip(images, targets):
+            
+            image_filename = '{:08}.png'.format(i)
+            target_filename = '{:08}_map.png'.format(i)
+            image_outpath = os.path.join(output_dir, image_filename)
+            target_outpath = os.path.join(output_dir, target_filename)
+            r = cv2.imwrite(outpath, image, )
+            r = cv2.imwrite(outpath, target, )
+            i = i + 1
+        
+        return
