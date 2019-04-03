@@ -586,7 +586,7 @@ class SegmentationDataSet(DataSet):
                 target_data = cv2.imread(image_path.split('.') + "_map.bmp", cv2.IMREAD_COLOR).astype(np.float32)
                 targets.append(target_data)
             except:
-                raise(IOError, 'Could not read in image: {}'.format(image_path.split(.) + "_map.bmp"))
+                raise(IOError, 'Could not read in image: {}'.format(image_path.split('.') + "_map.bmp"))
         return images, targets
 
     def write_raw_images(self, output_dir, images, targets):
