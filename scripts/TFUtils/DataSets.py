@@ -7,7 +7,7 @@ import tensorflow as tf
 # TODO: Improve error handling for loading in a data set
 
 class DataSet:
-    """ Class to represent a Data Set created, and annotated by IMPL (ie. racoon_data_set)
+    """ Class to represent a Data Set created, and annotated by IMPL
 
     Properties:
         data_set_type:  (str) Data set class (ie. object detection, or basic classification)
@@ -16,13 +16,17 @@ class DataSet:
     Methods:
         data_set_description_as_dict():
     """
-    def __init__(self, data_set_type, data_set_name, data_set_description, data_set_dir=None):
+    def __init__(self, data_set_type=None, data_set_name=None, data_set_description=None, data_set_dir=None):
         self.description_filename = 'data_set_description.json'
 
+        # If the data set exists load the description file
         if data_set_dir:
             self.data_set_dir = data_set_dir
             config_path = os.path.join(self.data_set_dir, 'annotations', self.description_filename)
             self._load_description_file_from_json(config_path)
+            return
+        if data_set_description:
+            self.set_attrs(data_set_description)
             return
 
         # Setting up basic data set properties
@@ -45,12 +49,17 @@ class DataSet:
         AssertionError('Abstract method, implement in children')
         return
 
+    def set_attrs(self, dict):
+        for key, value in dict.items():
+            setattr(self, key, value)
+        return
+
     def _load_description_file_from_json(self, config_path):
         with open(config_path, 'r') as fp:
             config_dict = json.load(fp)
-        for key, value in config_dict.items():
-            setattr(self, key, value)
+        self.setattrs(config_dict)
         return
+
     def __repr__(self):
         return 'Data Set Name: {}\nType: {}\nDecription: {}'.format(
             self.data_set_name,
@@ -147,8 +156,6 @@ class ClassificationDataSet(DataSet):
             os.mkdir(self.data_set_dir)
 
         self.image_data_gen = None
-        self.train_dir = os.path.join(self.data_set_dir, 'images/train')
-        self.validation_dir = os.path.join(self.data_set_dir, 'images/test')
         return
 
     @property
@@ -167,13 +174,13 @@ class ClassificationDataSet(DataSet):
         return labels
 
     @property
-    def test_images(self):
-        images, _ = self.load_data_set_from_raw_images(self.image_dir, phase='test')
+    def validation_images(self):
+        images, _ = self.load_data_set_from_raw_images(self.image_dir, phase='validation')
         return images
 
     @property
-    def test_labels(self):
-        _, labels = self.load_data_set_from_raw_images(self.image_dir, phase='test')
+    def validation_labels(self):
+        _, labels = self.load_data_set_from_raw_images(self.image_dir, phase='validation')
         return labels
 
     @property
@@ -258,6 +265,8 @@ class ClassificationDataSet(DataSet):
                 properties to a json file for later use
         """
         # Setting up output dirs
+        self.train_dir = os.path.join(self.data_set_dir, 'images/train')
+        self.validation_dir = os.path.join(self.data_set_dir, 'images/validation')
 
         if output_dir:
             output_dir = os.path.join(output_dir, self.data_set_name)
@@ -399,7 +408,7 @@ class ClassificationDataSet(DataSet):
             i = i + 1
 
         return
-    
+
     def write_record(self, output_path, images, labels, features):
         """ Function to Write a set of images and labels to a TF Record
 
@@ -543,22 +552,22 @@ class SegmentationDataSet(DataSet):
                 os.mkdir(phase_dir)
 
             # Load from input dir
-            images, targets = self.load_data_set_from_raw_images(input_image_dir, phase)            
+            images, targets = self.load_data_set_from_raw_images(input_image_dir, phase)
 
             # Save to image dir
             self.write_raw_images(phase_dir, images, targets)
 
             print('Copied {} train images {} for Dataset usage'.format(len(images), phase.upper()))
-                    
+
         # Write auxiliary files
         ds_description_dict = self.data_set_description_as_dict()
         description_path = os.path.join(output_dir, 'annotations', self.description_filename)
         with open(description_path, 'w') as fp:
             json.dump(ds_description_dict, fp)
-            
+
         print('Successfully built data set assets')
         return
-    
+
     def load_data_set_from_raw_images(self, top_dir, phase):
         """ Function to load images and targets from a directory structure
 
@@ -579,7 +588,7 @@ class SegmentationDataSet(DataSet):
         for image_path, cls in image_label_dict.items():
             try:
                 img_data = cv2.imread(image_path, cv2.IMREAD_COLOR).astype(np.float32)
-                images.append(img_data)                
+                images.append(img_data)
             except:
                 raise(IOError, 'Could not read in image: {}'.format(image_path))
             try:
@@ -590,10 +599,10 @@ class SegmentationDataSet(DataSet):
         return images, targets
 
     def write_raw_images(self, output_dir, images, targets):
-        
+
         i = 0
         for image, target in zip(images, targets):
-            
+
             image_filename = '{:08}.png'.format(i)
             target_filename = '{:08}_map.png'.format(i)
             image_outpath = os.path.join(output_dir, image_filename)
@@ -601,5 +610,5 @@ class SegmentationDataSet(DataSet):
             r = cv2.imwrite(outpath, image, )
             r = cv2.imwrite(outpath, target, )
             i = i + 1
-        
+
         return

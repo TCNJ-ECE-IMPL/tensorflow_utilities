@@ -11,7 +11,7 @@ import tensorflow as tf
 import inspect
 import IMPL_Models
 from TFUtils.DataSets import ClassificationDataSet
-from TFUtils.InOutUtils import load_data_set_path_dict
+from TFUtils.InOutUtils import load_data_set_info_from_json, load_data_set_info_from_dir
 
 def parse_args():
 
@@ -20,12 +20,6 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train models')
 
     rgroup = parser.add_argument_group('Required Arguments')
-
-    rgroup.add_argument('--dataset',
-                        help='Data Set to use (options shown to left)',
-                        required=True,
-                        choices=ds_options,
-                        type=str)
 
     rgroup.add_argument('--model',
                         help='Model to use for training',
@@ -45,12 +39,29 @@ def parse_args():
 
     ogroup = parser.add_argument_group('Optional Argument')
 
+    ogroup.add_argument('--dataset',
+                        help='Data Set to use (options shown to left)',
+                        required=False,
+                        choices=ds_options,
+                        default='',
+                        type=str)
+
+    ogroup.add_argument('--dataset_dir',
+                        help='Path to existing dataset files',
+                        required=False,
+                        default='',
+                        type=str)
+
     ogroup.add_argument('--gpu',
                         help='Flag: When set GPUs will be used for accelerated training',
                         required=False,
                         action='store_true')
 
     args = parser.parse_args()
+
+    if (args.dataset == args.dataset_dir == ''):
+        print('Must specify dataset or dataset_dir')
+        exit(0)
 
     return args
 
@@ -66,9 +77,16 @@ if __name__ == '__main__':
             session = tf.Session(config=config)
             K.set_session(session)
 
-    ds_info = load_data_set_path_dict()[args.dataset]
+    if args.dataset:
+        ds_info = load_data_set_info_from_json(args.dataset)
+        #dataset = ClassificationDataSet(data_set_description=ds_info)
 
-    dataset = ClassificationDataSet(data_set_dir=ds_info['data_set_dir'])
+    else:
+        ds_info = load_data_set_info_from_dir(args.dataset_dir)
+
+
+    dataset = ClassificationDataSet(data_set_description=ds_info)
+    print(dataset)
 
     print('----- Data Set: \n{}'.format(dataset))
 
@@ -79,7 +97,7 @@ if __name__ == '__main__':
         train_dir=dataset.train_dir,
         val_dir=dataset.validation_dir,
         num_train=dataset.data_set_size['train'],
-        num_val=dataset.data_set_size['test'],
+        num_val=dataset.data_set_size['validation'],
         epochs=args.epochs,
         batch_size=32)
 
