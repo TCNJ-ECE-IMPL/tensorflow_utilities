@@ -79,7 +79,6 @@ if __name__ == '__main__':
 
     if args.dataset:
         ds_info = load_data_set_info_from_json(args.dataset)
-        #dataset = ClassificationDataSet(data_set_description=ds_info)
 
     else:
         ds_info = load_data_set_info_from_dir(args.dataset_dir)
