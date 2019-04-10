@@ -33,7 +33,7 @@ def load_data_set_info_from_dir(top_dir):
         return map
 
     train_dir = os.path.join(top_dir, 'train')
-    val_dir = os.path.join(top_dir, 'test')
+    val_dir = os.path.join(top_dir, 'validation')
     train_labels = [x for x in os.listdir(train_dir) if os.path.isdir(os.path.join(train_dir, x))]
     val_labels = [x for x in os.listdir(val_dir) if os.path.isdir(os.path.join(val_dir, x))]
     assert(train_labels == val_labels)
