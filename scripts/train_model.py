@@ -53,9 +53,9 @@ def parse_args():
                         type=str)
 
     ogroup.add_argument('--gpu',
-                        help='Flag: When set GPUs will be used for accelerated training',
+                        help='Flag: When input, will use the gpu of the corresponding number entered',
                         required=False,
-                        action='store_true')
+                        type=str)
 
     args = parser.parse_args()
 
@@ -68,14 +68,17 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
+    # if args.gpu:
+    #     with K.tf.device('/gpu:1'):
+    #         print('Using GPU')
+    #         config = tf.ConfigProto(intra_op_parallelism_threads=4,\
+    #             inter_op_parallelism_threads=4, allow_soft_placement=True,\
+    #             device_count = {'CPU' : 1, 'GPU' : 2})
+    #         session = tf.Session(config=config)
+    #         K.set_session(session)
     if args.gpu:
-        with K.tf.device('/gpu:1'):
-            print('Using GPU')
-            config = tf.ConfigProto(intra_op_parallelism_threads=4,\
-                inter_op_parallelism_threads=4, allow_soft_placement=True,\
-                device_count = {'CPU' : 1, 'GPU' : 2})
-            session = tf.Session(config=config)
-            K.set_session(session)
+        os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
+
 
     if args.dataset:
         ds_info = load_data_set_info_from_json(args.dataset)
