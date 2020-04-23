@@ -17,6 +17,7 @@ then
     source tf-utils-venv/bin/activate
 fi
 
+pip install --upgrade pip
 pip install Cython
 pip install opencv-python
 # Installing Python package requirements
