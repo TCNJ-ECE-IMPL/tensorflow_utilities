@@ -13,6 +13,11 @@ import IMPL_Models
 from TFUtils.DataSets import ClassificationDataSet
 from TFUtils.InOutUtils import load_data_set_info_from_json, load_data_set_info_from_dir
 
+# Handle non-serializable np.float32 when dumping training history to JSON
+def float32_default(o):
+    if isinstance(o, np.float32):
+        return np.float64(o)
+
 def parse_args():
 
     ds_options = [x for x in os.listdir(os.environ['DCNN_DATASETS_PATH'])]
@@ -70,7 +75,8 @@ if __name__ == '__main__':
     args = parse_args()
     if args.gpu:
         os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
-
+    else:
+        tf.config.set_visible_devices([], 'GPU') # Force TensorFlow to use CPU
 
     if args.dataset:
         ds_info = load_data_set_info_from_json(args.dataset)
@@ -87,13 +93,20 @@ if __name__ == '__main__':
     model = IMPL_Models.load_model(args.model)
     print(model)
 
+    batch_size = 32
+
+    # Adjust batch size to ensure dataset size <= batch size
+    for phase in ds_info["data_set_size"]:
+        if(ds_info["data_set_size"][phase] < batch_size):
+            batch_size = ds_info["data_set_size"][phase]
+
     results = model.fit_gen(
         train_dir=dataset.train_dir,
         val_dir=dataset.validation_dir,
         num_train=dataset.data_set_size['train'],
         num_val=dataset.data_set_size['validation'],
         epochs=args.epochs,
-        batch_size=32)
+        batch_size=batch_size)
 
     if not os.path.isdir(args.output_dir):
         os.mkdir(args.output_dir)
@@ -101,4 +114,4 @@ if __name__ == '__main__':
     model.save(args.output_dir)
 
     with open(os.path.join(args.output_dir, 'history.json'), 'w') as f:
-        json.dump(results.history, f)
+        json.dump(results.history, f, default=float32_default, sort_keys=True, indent=4)

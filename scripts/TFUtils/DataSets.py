@@ -374,8 +374,8 @@ class ClassificationDataSet(DataSet):
              images:    ([ndarray])
              labels:    ([str])
         """
-        if not ((phase == 'test') or (phase == 'train')):
-            raise('Argument Error . . . must provide either "test" or "train"')
+        if not ((phase == 'test') or (phase == 'train') or (phase == 'validation')):
+            raise('Argument Error . . . must provide either "test", "train", or "validation"')
 
         image_dir = os.path.join(top_dir, phase)
         image_label_dict = self._get_image_label_dict(image_dir)
@@ -421,7 +421,7 @@ class ClassificationDataSet(DataSet):
         Returns:
 
         """
-        writer = tf.python_io.TFRecordWriter(output_path)
+        writer = tf.io.TFRecordWriter(output_path)
         for image, label in zip(images, labels):
             # Create a feature
             feature = {self.features['label']['name']: self._bytes_feature(tf.compat.as_bytes(label)),
@@ -578,8 +578,8 @@ class SegmentationDataSet(DataSet):
              images:    ([ndarray])
              targets:    ([ndarray])
         """
-        if not ((phase == 'test') or (phase == 'train')):
-            raise('Argument Error . . . must provide either "test" or "train"')
+        if not ((phase == 'test') or (phase == 'train') or (phase == 'validation')):
+            raise('Argument Error . . . must provide either "test", "train", or "validation"')
 
         image_dir = os.path.join(top_dir, phase)
         image_label_dict = self._get_image_label_dict(image_dir)
