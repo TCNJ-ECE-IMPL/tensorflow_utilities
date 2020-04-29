@@ -76,6 +76,7 @@ if __name__ == '__main__':
     if args.gpu:
         os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
     else:
+        print("No GPU specified; using CPU instead")
         tf.config.set_visible_devices([], 'GPU') # Force TensorFlow to use CPU
 
     if args.dataset:
